@@ -19,7 +19,7 @@ std::string hash_block;
 
 struct Payload {
 long sequence;
-time_t timestamp;
+long long timestamp;
 std::string data; // Ainda não defini o tipo de data
 std::string prev_hash;
 };
@@ -43,7 +43,7 @@ public:
   Payload get_payload(void) const { return payload;}
   // Timestamp setting
   void set_timestamp(void);
-  time_t get_timestamp(void) const { return payload.timestamp; }
+  long long get_timestamp(void) const { return payload.timestamp; }
 
   // Visual methods
   void display(void) const;

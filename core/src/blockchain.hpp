@@ -5,7 +5,6 @@
 #include "block.hpp"
 // Importing external libraries
 // Importing standard libraries
-#include <chrono>
 #include <iostream>
 #include <vector>
 
@@ -13,14 +12,16 @@ class Blockchain {
 private:
   int difficulty;
   char pow_prefix = '0';
-  std::vector<const Block *> chain;
+  std::vector<Block *> chain;
 
   /* Private methods */
+  // Create blocks
+  Block* create_genesis_block(void);
 
-  // Crreate blocks
-  const Block* create_genesis_block(void);
+  // Validation Block
+  bool block_validation(Block& block) const;
 
-  const Block& get_last_block(void) const;
+  Block& get_last_block(void) const;
   std::string get_hash_last_block(void) const;
 
 public:
@@ -28,10 +29,15 @@ public:
   Blockchain(int diff = 4);
   ~Blockchain();
 
-  // Create block method
-  const Block* create_block(const std::string& data);
+  // Getters
+  int get_difficulty(void) const { return difficulty; }
+  char get_pow_prefix(void) const { return pow_prefix; }
 
-  void mining_block(const Payload& data);
+  // Create block method
+  Block* create_block(const std::string& data);
+
+  Block* mining_block(Block& block);
+  std::vector<Block*> send_block(Block& block);
 
   // Visualizating the blocks/chain
   void display(void) const;

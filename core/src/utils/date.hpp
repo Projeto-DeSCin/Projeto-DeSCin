@@ -3,6 +3,6 @@
 
 #include <chrono>
 
-std::time_t date (void);
+long long date (void);
 
 #endif // DATE_HPP

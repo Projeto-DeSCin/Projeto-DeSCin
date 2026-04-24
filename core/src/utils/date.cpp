@@ -1,8 +1,9 @@
 #include "date.hpp"
 
-std::time_t date (void) {
-    auto current = std::chrono::system_clock::now();
-    std::time_t cur_time = std::chrono::system_clock::to_time_t(current);
+long long date (void) {
 
-    return cur_time;
+    auto cur_time = std::chrono::system_clock::now();
+    auto duration_object = cur_time.time_since_epoch();
+
+    return std::chrono::duration_cast<std::chrono::seconds>(duration_object).count();
 }

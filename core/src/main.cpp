@@ -4,12 +4,9 @@
 #include <iostream>
 #include <vector>
 
-
-#define endl '\n'
-
 int main(void) {
 
-  int difficulty = 4; // Dificuldade para quebrar o hash do bloco
+  int difficulty = 5; // Dificuldade para quebrar o hash do bloco
   // Instancing base block of the blockchain
   Blockchain *blockchain = new Blockchain(difficulty);
 
@@ -17,9 +14,10 @@ int main(void) {
   int num_blocks = 10;
 
   for (int i = 0; i <= num_blocks; i++) {
-    const Block* block = blockchain->create_block("Bloco " + std::to_string(i));
-    // long long mine_info = blockchain->mining_block(block);
-    // chain = blockchain->send_block(mine_info.mined_block);
+    Block* block = blockchain->create_block("Bloco " + std::to_string(i));
+    Block* mined_block = blockchain->mining_block(*block);
+    std::vector < Block *> chain = blockchain->send_block(*mined_block);
+    std::cout << "---------- BLOCKCHAIN -----------" << std::endl << chain[i] << std::endl;
   }
 
   // std::cout << "---------- INITIAL BLOCKCHAIN -----------" << std::endl << chain <<

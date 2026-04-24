@@ -53,6 +53,7 @@ set(BLOCK_FILES
 set(BLOCK_HEADER
     core/src/utils/hash.cpp
     core/src/utils/date.cpp
+    core/src/utils/hash_validation.cpp
 )
 
 # Atribuindo arquivos correspondentes a criação do executável
