@@ -44,10 +44,22 @@ set(executable_name descin_blockchain)
 # Definindo o nome do arquivo executável do Projeto_DeSCin
 add_executable(${executable_name})
 
+# Defininfo conjunto de arquivos para compilação
+set(BLOCK_FILES
+    core/src/block.cpp
+    core/src/blockchain.cpp
+)
+
+set(BLOCK_HEADER
+    core/src/utils/hash.cpp
+    core/src/utils/date.cpp
+)
+
 # Atribuindo arquivos correspondentes a criação do executável
 target_sources(${executable_name} PRIVATE
-    src/main.cpp
-    #src/block.cpp
+    core/src/main.cpp
+    ${BLOCK_FILES}
+    ${BLOCK_HEADER}
 )
 
 # Atribuindo as bibliotecas ao programa
@@ -64,9 +76,14 @@ enable_testing()
 
 set(run_tests descin_tests)
 
+set(BLOCK_FILES_TEST)
+
+set(BLOCK_HEADER_TEST)
+
 add_executable(${run_tests}
-    src/main.cpp
-    #src/block.cpp
+    core/src/main.test.cpp
+    ${BLOCK_FILES_TEST}
+    ${BLOCK_HEADER_TEST}
 )
 
 target_link_libraries(${run_tests} PRIVATE

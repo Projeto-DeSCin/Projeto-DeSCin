@@ -94,4 +94,3 @@ Verifica a integridade criptográfica dos blocos e carteiras:
  ┣ 📜 CMakeLists.txt     # Orquestrador de compilação e dependências
  ┗ 📜 README.md          # Este arquivo
 ````
-
