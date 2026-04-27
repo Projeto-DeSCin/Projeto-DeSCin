@@ -11,7 +11,7 @@
 class Blockchain {
 private:
   int difficulty;
-  char pow_prefix = '0';
+  char pow_prefix = '1';
   std::vector<Block *> chain;
 
   /* Private methods */

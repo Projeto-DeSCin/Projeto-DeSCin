@@ -48,9 +48,11 @@ add_executable(${executable_name})
 set(BLOCK_FILES
     core/src/block.cpp
     core/src/blockchain.cpp
+    core/src/transaction.cpp
+    core/src/wallet.cpp
 )
 
-set(BLOCK_HEADER
+set(UTILS_FILES
     core/src/utils/hash.cpp
     core/src/utils/date.cpp
     core/src/utils/hash_validation.cpp
@@ -60,7 +62,7 @@ set(BLOCK_HEADER
 target_sources(${executable_name} PRIVATE
     core/src/main.cpp
     ${BLOCK_FILES}
-    ${BLOCK_HEADER}
+    ${UTILS_FILES}
 )
 
 # Atribuindo as bibliotecas ao programa
