@@ -7,11 +7,16 @@
 #ifndef BLOCK_HPP
 #define BLOCK_HPP
 
-// Importing default libraries
+// Importing std libraries
 #include <string>
 #include <iostream>
+#include <deque>
+// Importing hpp libraries
+#include "transaction.hpp"
+#include <nlohmann/json.hpp>
 
-// Data structs to the clss
+
+// Data structs to the class
 struct Header {
 long nonce;
 std::string hash_block;
@@ -19,10 +24,14 @@ std::string hash_block;
 
 struct Payload {
 long sequence;
-time_t timestamp;
-std::string data; // Ainda não defini o tipo de data
+long long timestamp;
+std::deque<Transaction> data; // Agora a data é um vetor de transações
 std::string prev_hash;
 };
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Header, nonce, hash_block)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Payload, sequence, timestamp, data, prev_hash)
+
 
 class Block {
 private:
@@ -31,8 +40,11 @@ private:
 
 public:
   // Constrcutor and destructor
-  Block();
-  ~Block();
+  Block() = default;
+  Block(long sequence, std::string prev_hash, const std::deque<Transaction>& data);
+  ~Block() = default;
+
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(Block, header, payload)
 
   // Header methods
   void set_header(const Header& hd);
@@ -41,9 +53,10 @@ public:
   // Payload methods
   void set_payload(const Payload& pd);
   Payload get_payload(void) const { return payload;}
+  std::string calculate_hash_block(void) const;
   // Timestamp setting
   void set_timestamp(void);
-  time_t get_timestamp(void) const { return payload.timestamp; }
+  long long get_timestamp(void) const { return payload.timestamp; }
 
   // Visual methods
   void display(void) const;
