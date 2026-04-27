@@ -4,7 +4,7 @@
 #include "transaction.hpp"
 #include "block.hpp"
 #include "utils/date.hpp"
-#include "utils/hash.hpp"
+#include "utils/hashing/hash.hpp"
 // Importing ext libraries
 #include <nlohmann/json.hpp>
 

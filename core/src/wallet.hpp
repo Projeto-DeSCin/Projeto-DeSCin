@@ -4,9 +4,15 @@
 #include <iostream>
 #include <string>
 
+struct PairKey {
+    std::string public_key;
+    std::string private_key;
+};
+
 class Wallet {
 
     private:
+        PairKey pair_key;
         std::string wallet_id;
         double wallet_balance;
 
@@ -16,6 +22,14 @@ class Wallet {
     public:
         Wallet(std::string wallet_id = "", double wallet_balance = 0);
         ~Wallet();
+
+        // Getters of the wallet's key pair
+        std::string get_public_key() const { return pair_key.public_key; }
+        std::string get_private_key() const { return pair_key.private_key; }
+
+        //
+        std::string format_data(std::string sender, std::string receiver, unsigned long amount, long long ts) const;
+        std::string sign_with_private_key(std::string message) const;
 
         std::string get_id() const;
         double get_balance() const;

@@ -13,8 +13,6 @@ std::vector<unsigned char> decode_signature(const std::string& signature) {
     for (size_t i = 0; i < signature.length(); i += 2) {
 
         std::string byteString = signature.substr(i, 2);
-
-
         unsigned char byte = static_cast<unsigned char>(strtol(byteString.c_str(), nullptr, 16));
 
         bytes.push_back(byte);

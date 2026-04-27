@@ -1,11 +1,13 @@
 #ifndef GENERATE_KEY_PAIR_HPP
 #define GENERATE_KEY_PAIR_HPP
 
+// Importing utils hpp
+#include "../openssl_utils.hpp"
+// Importing std libraries
 #include <string>
+// Importing openssal libraries
 #include <openssl/rsa.h>
 #include <openssl/pem.h>
-#include "openssl_utils.hpp"
-
 
 struct KeyPair {
     std::string publicKey;
@@ -13,14 +15,15 @@ struct KeyPair {
 };
 
 inline KeyPair generate_key_pair() {
-    EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, NULL);
-    EVP_PKEY_keygen_init(ctx);
-    EVP_PKEY_CTX_set_rsa_keygen_bits(ctx, 2048);
+    // Instantiate the context and set RSA keygen parameters
+    EVP_PKEY_CTX_Ptr ctx(EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, NULL));
+    EVP_PKEY_keygen_init(ctx.get());
+    EVP_PKEY_CTX_set_rsa_keygen_bits(ctx.get(), 2048);
 
-    EVP_PKEY *pkey = NULL;
-    EVP_PKEY_keygen(ctx, &pkey);
+    // Generating pair key
+    EVP_PKEY *pkey = nullptr;
     EVP_PKEY_Ptr pkeyPtr(pkey);
-    EVP_PKEY_CTX_free(ctx);
+    EVP_PKEY_keygen(ctx.get(), &pkey);
 
     // Extrair Chave Privada em formato PEM
     BIO *pri = BIO_new(BIO_s_mem());

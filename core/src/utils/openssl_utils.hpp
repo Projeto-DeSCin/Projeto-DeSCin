@@ -11,13 +11,21 @@ struct EVP_MD_CTX_Deleter {
     }
 };
 
+using EVP_CONTEXT_Ptr = std::unique_ptr<EVP_MD_CTX, EVP_MD_CTX_Deleter>;
+
 struct EVP_PKEY_Deleter {
     void operator()(EVP_PKEY* pkey) const {
         EVP_PKEY_free(pkey);
     }
 };
-
-using EvpContextPtr = std::unique_ptr<EVP_MD_CTX, EVP_MD_CTX_Deleter>;
 using EVP_PKEY_Ptr = std::unique_ptr<EVP_PKEY, EVP_PKEY_Deleter>;
+
+struct EVP_PKEY_CTX_Deleter {
+    void operator()(EVP_PKEY_CTX* ctx) const {
+        EVP_PKEY_CTX_free(ctx);
+    }
+};
+
+using EVP_PKEY_CTX_Ptr = std::unique_ptr<EVP_PKEY_CTX, EVP_PKEY_CTX_Deleter>;
 
 #endif // OPENSSL_UTILS_HPP

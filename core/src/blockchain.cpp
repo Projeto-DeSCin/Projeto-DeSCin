@@ -3,8 +3,8 @@
 #include "transaction.hpp"
 //Utils
 #include "utils/date.hpp"
-#include "utils/hash.hpp"
-#include "utils/hash_validation.hpp"
+#include "utils/hashing/hash.hpp"
+#include "utils/hashing/hash_validation.hpp"
 
 // Importing exxternal libraries
 #include <nlohmann/json.hpp>

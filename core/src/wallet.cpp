@@ -1,12 +1,30 @@
+// Importing hpp lirabry
 #include "wallet.hpp"
+
+// Importing utils library
+#include "../utils/encryptation/sign_message.hpp"
+
+// Importing std libraries
 #include <iostream>
 #include <string>
 
 // Wallet
 Wallet::Wallet(std::string wallet_id, double wallet_balance)
-    : wallet_id(wallet_id), wallet_balance(wallet_balance) {}
+    : wallet_id(wallet_id), wallet_balance(wallet_balance) {
+        // Generate pair key
+        pair_key = generate_pair_key();
+    }
 
 Wallet::~Wallet() {}
+
+// Merge data to sign
+std::string Wallet::format_data(std::string sender, std::string receiver, unsigned long amount, long long ts) const {
+    return sender + receiver + std::to_string(amount) + std::to_string(ts);
+}
+//
+std::string Wallet::sign_with_private_key(std::string message) const {
+    return sign_message(message, pair_key.private_key);
+}
 
 std::string Wallet::get_id() const {
     return wallet_id;

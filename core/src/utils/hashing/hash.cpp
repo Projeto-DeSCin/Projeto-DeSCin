@@ -6,7 +6,7 @@
 #include <stdexcept>
 // Importing utils
 #include "hash.hpp"
-#include "openssl_utils.hpp"
+#include "../openssl_utils.hpp"
 // Importing openssl libraries
 #include <openssl/conf.h>
 #include <openssl/evp.h>
@@ -15,7 +15,7 @@
 std::string hash (const std::string& data) {
 
     // Creating a new context struct do tipo EVP_MD_CTX
-    EvpContextPtr context(EVP_MD_CTX_new());
+    EVP_CONTEXT_Ptr context(EVP_MD_CTX_new());
 
     if (!context) { // Error case
         throw std::runtime_error("Falha ao criar o contexto EVP_MD_CTX");

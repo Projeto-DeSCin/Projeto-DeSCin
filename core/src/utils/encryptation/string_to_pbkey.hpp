@@ -1,11 +1,11 @@
-#include "string_to_pbkey.hpp"
+#ifndef STRING_TO_PUBKEY_HPP
+#define STRING_TO_PUBKEY_HPP
+
 #include <openssl/evp.h>
 #include <openssl/pem.h>
-#include <openssl/bio.h>
 #include <string>
 
-EVP_PKEY* string_to_pbkey(const std::string& key_str) {
-
+inline EVP_PKEY* string_to_pbkey(const std::string& key_str) {
     BIO* bio = BIO_new_mem_buf(key_str.data(), -1);
 
     if (bio == nullptr) {
@@ -13,8 +13,9 @@ EVP_PKEY* string_to_pbkey(const std::string& key_str) {
     }
 
     EVP_PKEY* pubKey = PEM_read_bio_PUBKEY(bio, nullptr, nullptr, nullptr);
-
     BIO_free(bio);
 
     return pubKey;
-}
+};
+
+#endif // STRING_TO_PUBKEY_HPP

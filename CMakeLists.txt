@@ -54,11 +54,8 @@ set(BLOCK_FILES
 )
 
 set(UTILS_FILES
-    core/src/utils/hash.cpp
-    core/src/utils/date.cpp
-    core/src/utils/hash_validation.cpp
-    core/src/utils/decode_signature.cpp
-    core/src/utils/string_to_pbkey.cpp
+    core/src/utils/hashing/hash.cpp
+    core/src/utils/encryptation/decode_signature.cpp
 )
 
 # Atribuindo arquivos correspondentes a criação do executável

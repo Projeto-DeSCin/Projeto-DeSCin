@@ -8,7 +8,6 @@
 #include <string>
 #include <memory>
 
-
 /*
  *  The hash function for the blockchain
  */
