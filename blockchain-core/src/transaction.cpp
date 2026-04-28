@@ -1,13 +1,16 @@
 // Importing transaction
 #include "transaction.hpp"
+
 // Importing util libs
 #include "utils/date.hpp"
 #include "utils/openssl_utils.hpp"
 #include "utils/hashing/hash.hpp"
 #include "utils/encryptation/string_to_pbkey.hpp"
 #include "utils/encryptation/decode_signature.hpp"
+
 // Importing std libs
 #include <string>
+
 // Importing ext libs
 #include <nlohmann/json.hpp>
 #include <openssl/evp.h>

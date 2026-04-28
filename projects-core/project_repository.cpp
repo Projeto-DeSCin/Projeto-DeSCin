@@ -26,39 +26,37 @@ void ProjectRepository::_seed() {
 }
 
 // Projetos
-std::vector<ApiProject> ProjectRepository::list(const std::string& status_filter) const {
+std::vector<ProjectsBody> ProjectRepository::get_projects(const std::string& status_filter) const {
     std::lock_guard<std::mutex> lock(_mtx);
-    std::vector<ApiProject> out;
+    std::vector<ProjectsBody> out;
     for (auto& [id, p] : _projects)
         if (status_filter.empty() || p.status == status_filter)
             out.push_back(p);
     return out;
 }
 
-std::optional<ApiProject> ProjectRepository::find(const std::string& id) const {
+std::optional<ProjectsBody> ProjectRepository::get_project_by_id(const std::string& id) const {
     std::lock_guard<std::mutex> lock(_mtx);
     auto it = _projects.find(id);
     if (it == _projects.end()) return std::nullopt;
     return it->second;
 }
 
-bool ProjectRepository::is_open(const std::string& id) const {
+bool ProjectRepository::is_project_active(const std::string& id) const {
     std::lock_guard<std::mutex> lock(_mtx);
     auto it = _projects.find(id);
     return it != _projects.end() && it->second.status == "open";
 }
 
 // Investimentos
-
 std::string ProjectRepository::project_name(const std::string& id) const {
     std::lock_guard<std::mutex> lock(_mtx);
     auto it = _projects.find(id);
     return it != _projects.end() ? it->second.name : "";
 }
 
-
-void ProjectRepository::record_investment(const std::string& investor_address,
-                                           const ApiInvestment& inv) {
+void ProjectRepository::update_funding(const std::string& investor_address,
+                                           const InvestimentBody& inv) {
     std::lock_guard<std::mutex> lock(_mtx);
     _investments[investor_address].push_back(inv);
 
@@ -71,7 +69,7 @@ void ProjectRepository::record_investment(const std::string& investor_address,
         it->second.status = "funded";
 }
 
-std::vector<ApiInvestment> ProjectRepository::investiments_for(const std::string& address) const {
+std::vector<InvestimentBody> ProjectRepository::investments_for(const std::string& address) const {
     std::lock_guard<std::mutex> lock(_mtx);
     auto it = _investments.find(address);
     if (it == _investments.end()) return {};

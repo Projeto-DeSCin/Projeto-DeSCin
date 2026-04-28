@@ -1,7 +1,7 @@
 #ifndef AUTH_MIDDLEWARE_HPP
 #define AUTH_MIDDLEWARE_HPP
 
-#include "crow.h"
+// Importing std libraries
 #include <string>
 #include <unordered_map>
 #include <mutex>
@@ -9,6 +9,9 @@
 #include <random>
 #include <sstream>
 #include <iomanip>
+
+// Importing Crow library
+#include "crow.h"
 
 struct Session {
     std::string user_id;
@@ -55,7 +58,7 @@ struct AuthMiddleware : crow::ILocalMiddleware {
 
         for (auto& p : public_paths) {
             if (req.url == p) {
-                ctx.authenticated = true;  // permitir sem token
+                ctx.authenticated = true;
                 return;
             }
         }

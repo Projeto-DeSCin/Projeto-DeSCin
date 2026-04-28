@@ -29,6 +29,7 @@ FetchContent_MakeAvailable(crow)
 # Para Edísio e os demais, a Biblioteca do OpenSSl é a única que não baixa via protocolo http
 # pois ela já pode existir em sistema linux/mac, então aqui é procurado apenas no sistema local
 # Dê preferência ao uso do Linux
+find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
 
 FetchContent_Declare(
@@ -36,7 +37,7 @@ FetchContent_Declare(
   URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
 )
 FetchContent_MakeAvailable(googletest)
-# -------------------------------
+# -----------------------------------------------------------
 
 # Nome do arquivo de Execução/Compilado
 set(executable_name descin_blockchain)
@@ -46,38 +47,72 @@ add_executable(${executable_name})
 
 # Defininfo conjunto de arquivos para compilação
 set(BLOCK_FILES
-    core/src/block.cpp
-    core/src/blockchain.cpp
-    core/src/mempool.cpp
-    core/src/transaction.cpp
-    core/src/wallet.cpp
+    blockchain-core/src/block.cpp
+    blockchain-core/src/blockchain.cpp
+    blockchain-core/src/mempool.cpp
+    blockchain-core/src/transaction.cpp
+    blockchain-core/src/wallet.cpp
+)
+
+set(PROJECT_FILES
+    projects-core/project_repository.cpp
 )
 
 set(API_FILES
-    core/src/api/middleware/auth_middleware.cpp
+    api/descin_node.cpp
+    api/middleware/auth_middleware.cpp
 )
 
 set(UTILS_FILES
-    core/src/utils/hashing/hash.cpp
-    core/src/utils/encryptation/decode_signature.cpp
+    blockchain-core/src/utils/hashing/hash.cpp
+    blockchain-core/src/utils/encryptation/decode_signature.cpp
 )
 
 # Atribuindo arquivos correspondentes a criação do executável
 target_sources(${executable_name} PRIVATE
-    core/src/main.cpp
+    main.cpp
     ${BLOCK_FILES}
-    ${API_FILES}
+    ${PROJECT_FILES}
     ${UTILS_FILES}
 )
 
 # Atribuindo as bibliotecas ao programa
 target_link_libraries(${executable_name} PRIVATE
+    Threads::Threads
     nlohmann_json::nlohmann_json
     Crow::Crow
     OpenSSL::SSL
     OpenSSL::Crypto
     pthread
 )
+
+# Ferramentas de runtime da API -------------------------------------
+
+# Nome do arquivo de Execução/Compilado
+set(api_executable_name descin_api)
+
+# Definindo o nome do arquivo executável da api do Projeto_DeSCin
+add_executable(${api_executable_name})
+
+# Atribuindo arquivos correspondentes a criação do executável
+target_sources(${api_executable_name} PRIVATE
+    main.cpp
+    ${BLOCK_FILES}
+    ${PROJECT_FILES}
+    ${API_FILES}
+    ${UTILS_FILES}
+)
+
+# Atribuindo as bibliotecas ao programa
+target_link_libraries(${api_executable_name} PRIVATE
+    Threads::Threads
+    nlohmann_json::nlohmann_json
+    Crow::Crow
+    OpenSSL::SSL
+    OpenSSL::Crypto
+    pthread
+)
+
 
 # Ferramenta de testes unitários ----------
 enable_testing()
@@ -89,7 +124,7 @@ set(BLOCK_FILES_TEST)
 set(BLOCK_HEADER_TEST)
 
 add_executable(${run_tests}
-    core/src/tests/main.test.cpp
+    blockchain-core/src/tests/main.test.cpp
     ${BLOCK_FILES_TEST}
     ${BLOCK_HEADER_TEST}
 )

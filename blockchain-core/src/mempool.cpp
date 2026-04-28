@@ -10,20 +10,21 @@ bool Mempool::add_transaction(const Transaction& tx) {
         return false;
     }
 
+    // Valid transaction, add it to the mempool
     std::lock_guard<std::mutex> lock(mempool_mutex);
-
     pending_transactions.push_back(tx);
     return true;
 }
 
 std::deque<Transaction> Mempool::get_pending_transactions(void) const {
+    //
     std::lock_guard<std::mutex> lock(mempool_mutex);
 
     return pending_transactions;
 }
 
 void Mempool::clear_pending_transactions(size_t count) {
-    //
+    // mempool lock
     std::lock_guard<std::mutex> lock(mempool_mutex);
 
     // Verifica se o número de transações a serem removidas é maior que o tamanho do mempool

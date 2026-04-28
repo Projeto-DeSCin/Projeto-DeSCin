@@ -1,6 +1,4 @@
-#include "auth_middleware.hpp"
-
-#include "crow.h"
+// Importing std libraries
 #include <string>
 #include <unordered_map>
 #include <mutex>
@@ -8,6 +6,11 @@
 #include <random>
 #include <sstream>
 #include <iomanip>
+
+// Importing local libraries
+#include "auth_middleware.hpp"
+#include "crow.h"
+
 
 std::string SessionStore::_random_token() {
     std::random_device rd;

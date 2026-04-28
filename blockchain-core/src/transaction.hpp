@@ -39,7 +39,11 @@ class Transaction{
     TransactionBody get_body(void) const { return body; }
     unsigned long get_amount(void) const { return body.amount; }
     std::string get_hash(void) const { return body.transaction_hash; }
+
+    // P2P getter keys
     std::string get_sender(void) const { return body.sender_key; }
+    std::string get_receiver(void) const { return body.receiver_key; }
+
 
 };
 

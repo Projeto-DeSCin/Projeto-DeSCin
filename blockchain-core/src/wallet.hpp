@@ -1,10 +1,12 @@
 #ifndef WALLET_HPP
 #define WALLET_HPP
 
+// Importing std libraries
 #include <iostream>
 #include <string>
-#include "utils/encryptation/generate_key_pair.hpp"
 
+// Importing utils libraries
+#include "utils/encryptation/generate_key_pair.hpp"
 
 class Wallet {
 
@@ -24,7 +26,7 @@ class Wallet {
         std::string get_public_key() const { return pair_key.public_key; }
         std::string get_private_key() const { return pair_key.private_key; }
 
-        //
+        // Encryption
         std::string format_data(std::string sender, std::string receiver, unsigned long amount, long long ts) const;
         std::string sign_with_private_key(std::string message) const;
 
@@ -35,35 +37,5 @@ class Wallet {
         virtual void check_balance();
         virtual void change_balance(double amount);
 };
-
-// class Buy : public Wallet {
-
-//     private:
-//         Wallet& destination;
-
-//     protected:
-//         void check_balance() override;
-//         void change_balance(double amount) override;
-
-//     public:
-//         Buy(Wallet& origin, Wallet& destination);
-//         ~Buy();
-//         void transaction_execute(double amount);
-// };
-
-// class Sell : public Wallet {
-
-//     private:
-//         Wallet& destination;
-
-//     protected:
-//         void check_balance() override;
-//         void change_balance(double amount) override;
-
-//     public:
-//         Sell(Wallet& origin, Wallet& destination);
-//         ~Sell();
-//         void transaction_execute(double amount);
-// };
 
 #endif // WALLET_HPP
