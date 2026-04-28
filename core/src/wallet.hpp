@@ -3,16 +3,13 @@
 
 #include <iostream>
 #include <string>
+#include "utils/encryptation/generate_key_pair.hpp"
 
-struct PairKey {
-    std::string public_key;
-    std::string private_key;
-};
 
 class Wallet {
 
     private:
-        PairKey pair_key;
+        KeyPair pair_key;
         std::string wallet_id;
         double wallet_balance;
 

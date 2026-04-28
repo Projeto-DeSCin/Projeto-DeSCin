@@ -33,6 +33,7 @@ public:
   // Getters
   int get_difficulty(void) const { return difficulty; }
   char get_pow_prefix(void) const { return pow_prefix; }
+  const std::vector<std::shared_ptr<Block>>& get_chain(void) const { return chain; }
 
   // Create block method
   std::shared_ptr<Block> create_block(const std::deque<Transaction> &data_tx);

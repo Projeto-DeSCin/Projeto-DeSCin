@@ -7,7 +7,6 @@
 #include <iomanip>
 #include <sstream>
 
-
 inline std::string sign_message(const std::string& privateKeyPEM, const std::string& message) {
 
     BIO* bio = BIO_new_mem_buf(privateKeyPEM.c_str(), -1);

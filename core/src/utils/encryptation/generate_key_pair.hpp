@@ -10,8 +10,8 @@
 #include <openssl/pem.h>
 
 struct KeyPair {
-    std::string publicKey;
-    std::string privateKey;
+    std::string public_key;
+    std::string private_key;
 };
 
 inline KeyPair generate_key_pair() {
