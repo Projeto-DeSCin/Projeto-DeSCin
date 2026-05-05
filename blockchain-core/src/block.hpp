@@ -15,7 +15,6 @@
 #include "transaction.hpp"
 #include <nlohmann/json.hpp>
 
-
 // Data structs to the class
 struct Header {
 long nonce;

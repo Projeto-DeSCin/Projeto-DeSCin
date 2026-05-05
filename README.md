@@ -1,4 +1,9 @@
-# 🧬 DeSci Blockchain Node
+# 🧬 DeSCin Blockchain Node
+
+
+![C++](https://img.shields.io/badge/C++-17-blue.svg?style=flat&logo=c%2B%2B)
+![CMake](https://img.shields.io/badge/CMake-3.14+-green.svg?style=flat&logo=cmake)
+![Linux](https://img.shields.io/badge/Linux-Supported-yellow.svg?style=flat&logo=linux)
 
 Um nó de blockchain focado em Ciência Descentralizada (DeSci), construído em **C++17** moderno. Este projeto implementa a estrutura base de blocos, criptografia de carteiras (Wallets), e testes unitários automatizados, utilizando `CMake` como sistema de build.
 
@@ -69,7 +74,7 @@ Rodar o Nó Principal
 Inicia a criação do Bloco Gênesis e a estrutura principal da blockchain:
 
 ````Bash
-./build/descidescin_blockchain
+./build/descin_blockchain
 ````
 
 Rodar os Testes Unitários (GoogleTest)\
@@ -82,15 +87,66 @@ Verifica a integridade criptográfica dos blocos e carteiras:
 ## 📂 Estrutura do Projeto
 ````PlainText
 📦 DeSci_Blockchain
- ┣ 📂 src
- ┃ ┣ 📜 Block.cpp        # Lógica de mineração e hashes
- ┃ ┣ 📜 Block.h
- ┃ ┣ 📜 Wallet.cpp       # Lógica de chaves públicas/privadas <Ainda em implementação>
- ┃ ┣ 📜 Wallet.h
- ┃ ┣ 📜 main.cpp         # Ponto de entrada do Nó
- ┃ ┣ 📜 sha256.h         # Algoritmo de criptografia
- ┃ ┣ 📜 test_block.cpp   # Suíte de testes da estrutura de Blocos
- ┃ ┗ 📜 test_wallet.cpp  # Suíte de testes das Carteiras
- ┣ 📜 CMakeLists.txt     # Orquestrador de compilação e dependências
- ┗ 📜 README.md          # Este arquivo
+ ┣ 📂 api                  # Camada de Rede (Rotas Crow, Middleware e DescinNode Adapter)
+ ┣ 📂 blockchain-core      # O Cérebro: Consenso, Mempool, Blocos e Transações
+ ┃ ┣ 📂 src
+ ┃ ┃ ┣ 📜 blockchain.cpp    # Lógica do encadeamento
+ ┃ ┃ ┣ 📜 block.cpp         # Lógica de mineração e hashes
+ ┃ ┃ ┣ 📜 Wallet.cpp        # Lógica de chaves RSA públicas/privadas
+ ┃ ┃ ┣ 📜 main.cpp          # Ponto de entrada
+ ┃ ┃ ┗ 📜 transaction.cpp   # Lògica das transações
+ ┃ ┃ 
+ ┃ ┣ 📂 tests               # Suítes de testes automatizados
+ ┃ ┃ ┣ 📜 test_block.cpp
+ ┃ ┃ ┗ 📜 test_wallet.cpp
+ ┃ ┃ 
+ ┃ ┗ 📂 utils
+ ┃   ┗ 📜 sha256.h          # Algoritmo principal de hash
+ ┃
+ ┣ 📂 projects-core       # Persistência: Repositórios de Projetos e Investimentos
+ ┣ 📜 CMakeLists.txt      # Orquestrador de compilação
+ ┗ 📜 README.md           # Documentação principal
 ````
+
+---
+## 🏛️ Diagrama de Classes
+
+
+
+---
+## 🙅🏽‍♂️ Colaboradores
+
+<table> 
+    <tr>
+        <td align="center">
+          <a href="https://github.com/bernardobelfort">
+            <img src="https://avatars.githubusercontent.com/u/153245112?v=4" width="100px;" alt="Imagem do Colaborador 1"/><br>
+            <sub><b>Bernardo Belfort Leao</b></sub>
+          </a>
+        </td>
+        <td align="center">
+          <a href="https://github.com/edisiouchoacn-spec">
+            <img src="https://avatars.githubusercontent.com/u/235191061?v=4" width="100px;" alt="Imagem do Colaborador 2"/><br>
+            <sub><b>Edísio Uchoa Cavalcanti Neto</b></sub>
+          </a>
+        </td>
+        <td align="center">
+          <a href="https://github.com/FranciscoFaustino17">
+            <img src="https://avatars.githubusercontent.com/u/209528271?v=4" width="100px;" alt="Imagem do Colaborador 3"/><br>
+            <sub><b>Francisco Faustino de Souza Neto</b></sub>
+          </a>
+        </td>
+        <td align="center">
+          <a href="https://github.com/GabrielCassio">
+            <img src="https://avatars.githubusercontent.com/u/91679814?v=4" width="100px;" alt="Imagem do Colaborador 4"/><br>
+            <sub><b>Gabriel Cássio Gomes Cileiro</b></sub>
+          </a>
+        </td>
+        <td align="center">
+          <a href="https://github.com/VictorLemosFr">
+            <img src="https://avatars.githubusercontent.com/u/107511134?v=4" width="100px;" alt="Imagem do Colaborador 5"/><br>
+            <sub><b>Victor Lemos de Freitas</b></sub>
+          </a>
+        </td>
+      </tr>
+</table>
