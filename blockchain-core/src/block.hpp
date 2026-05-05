@@ -32,7 +32,6 @@ std::string prev_hash;
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Header, nonce, hash_block)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Payload, sequence, timestamp, data, prev_hash)
 
-
 class Block {
 private:
   Header header;
