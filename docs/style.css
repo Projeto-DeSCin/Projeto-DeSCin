@@ -42,7 +42,12 @@ body {
 }
 
 .logo-de { color: #000; }
-.logo-scin { color: var(--primary-purple); }
+.logo-scin { color: var(--primary-purple-hover); }
+
+a {
+    text-decoration: none;
+    color: var(--primary-purple);
+}
 
 h1 {
     font-size: 2.2em;
@@ -58,8 +63,13 @@ h2 {
     margin-top: 40px;
 }
 
+
 h3 {
     font-size: 1.2em;
+    color: var(--primary-purple);
+}
+
+#running p {
     color: var(--primary-purple);
 }
 
