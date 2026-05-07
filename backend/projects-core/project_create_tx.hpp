@@ -4,7 +4,7 @@
 // Include the base Transaction class
 #include "../blockchain-core/src/transaction.hpp"
 // Include project model
-#include "project.hpp"
+#include "project_state.hpp"
 
 class ProjectCreateTx : public Transaction {
     private:

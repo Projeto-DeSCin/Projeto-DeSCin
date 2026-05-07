@@ -3,7 +3,7 @@
 #include <string>
 
 // Importing utils
-#include "../blockchain-core/src/utils/date.hpp"
+#include "../backend/blockchain-core/src/utils/date.hpp"
 
 bool DescinNode::process_investment(const std::string& sender, const std::string& project_id, unsigned long amount, const std::string& signature) {
     // Lockzinho

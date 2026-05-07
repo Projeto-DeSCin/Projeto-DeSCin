@@ -37,25 +37,19 @@ FetchContent_Declare(
   URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
 )
 FetchContent_MakeAvailable(googletest)
-# -----------------------------------------------------------
 
-# Nome do arquivo de Execução/Compilado
-set(executable_name descin_blockchain)
+# Definindo conjuntos de arquivos para compilação ----------------------------------------
 
-# Definindo o nome do arquivo executável do Projeto_DeSCin
-add_executable(${executable_name})
-
-# Defininfo conjunto de arquivos para compilação
 set(BLOCK_FILES
-    blockchain-core/src/block.cpp
-    blockchain-core/src/blockchain.cpp
-    blockchain-core/src/mempool.cpp
-    blockchain-core/src/transaction.cpp
-    blockchain-core/src/wallet.cpp
+    backend/blockchain-core/src/block.cpp
+    backend/blockchain-core/src/blockchain.cpp
+    backend/blockchain-core/src/mempool.cpp
+    backend/blockchain-core/src/transaction.cpp
+    backend/blockchain-core/src/wallet.cpp
 )
 
 set(PROJECT_FILES
-    projects-core/project_repository.cpp
+    backend/projects-core/project_state.cpp
 )
 
 set(API_FILES
@@ -64,15 +58,22 @@ set(API_FILES
 )
 
 set(UTILS_FILES
-    blockchain-core/src/utils/hashing/hash.cpp
-    blockchain-core/src/utils/encryptation/decode_signature.cpp
+    backend/blockchain-core/src/utils/hashing/hash.cpp
+    backend/blockchain-core/src/utils/encryptation/decode_signature.cpp
 )
 
-# Atribuindo arquivos correspondentes a criação do executável
+
+# Arquivo compilado da Blockchain -------------------------------------------------------------------------
+# Nome do arquivo de Execução/Compilado da blockchain
+set(executable_name descin_blockchain)
+
+# Definindo o nome do arquivo executável da blockchain
+add_executable(${executable_name})
+
+# Atribuindo arquivos correspondentes a criação do executável da blockchain
 target_sources(${executable_name} PRIVATE
-    main.cpp
+    main_blockchain.cpp
     ${BLOCK_FILES}
-    ${PROJECT_FILES}
     ${UTILS_FILES}
 )
 
@@ -86,9 +87,9 @@ target_link_libraries(${executable_name} PRIVATE
     pthread
 )
 
-# Ferramentas de runtime da API -------------------------------------
+# Arquivo compilado da API -------------------------------------
 
-# Nome do arquivo de Execução/Compilado
+# Nome do arquivo de Execução/Compilado da API
 set(api_executable_name descin_api)
 
 # Definindo o nome do arquivo executável da api do Projeto_DeSCin
@@ -96,11 +97,11 @@ add_executable(${api_executable_name})
 
 # Atribuindo arquivos correspondentes a criação do executável
 target_sources(${api_executable_name} PRIVATE
-    main.cpp
+    main_api.cpp
     ${BLOCK_FILES}
+    ${UTILS_FILES}
     ${PROJECT_FILES}
     ${API_FILES}
-    ${UTILS_FILES}
 )
 
 # Atribuindo as bibliotecas ao programa
@@ -113,8 +114,59 @@ target_link_libraries(${api_executable_name} PRIVATE
     pthread
 )
 
+# Arquivo compilado dos projetos --------------------------
 
-# Ferramenta de testes unitários ----------
+# Nome do arquivo de Execução/Compilado da API
+set(project_executable_name descin_projects)
+
+# Definindo o nome do arquivo executável da api do Projeto_DeSCin
+add_executable(${project_executable_name})
+
+# Atribuindo arquivos correspondentes a criação do executável
+target_sources(${project_executable_name} PRIVATE
+    main_projects.cpp
+    ${PROJECT_FILES}
+)
+
+# Atribuindo as bibliotecas ao programa
+target_link_libraries(${project_executable_name} PRIVATE
+    Threads::Threads
+    nlohmann_json::nlohmann_json
+    Crow::Crow
+    OpenSSL::SSL
+    OpenSSL::Crypto
+    pthread
+)
+
+# Arquivo compilado Projeto_DeSCin ------------------------
+
+# Nome do arquivo de Execução/Compilado da API
+set(app_executable_name projeto_descin_app)
+
+# Definindo o nome do arquivo executável da api do Projeto_DeSCin
+add_executable(${app_executable_name})
+
+# Atribuindo arquivos correspondentes a criação do executável
+target_sources(${app_executable_name} PRIVATE
+    main.cpp
+    ${BLOCK_FILES}
+    ${UTILS_FILES}
+    ${API_FILES}
+    ${PROJECT_FILES}
+)
+
+# Atribuindo as bibliotecas ao programa
+target_link_libraries(${app_executable_name} PRIVATE
+    Threads::Threads
+    nlohmann_json::nlohmann_json
+    Crow::Crow
+    OpenSSL::SSL
+    OpenSSL::Crypto
+    pthread
+)
+
+
+# Ferramenta de testes unitários --------------------------
 enable_testing()
 
 set(run_tests descin_tests)
@@ -124,7 +176,7 @@ set(BLOCK_FILES_TEST)
 set(BLOCK_HEADER_TEST)
 
 add_executable(${run_tests}
-    blockchain-core/src/tests/main.test.cpp
+    main.test.cpp
     ${BLOCK_FILES_TEST}
     ${BLOCK_HEADER_TEST}
 )

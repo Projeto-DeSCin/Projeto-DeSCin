@@ -1,5 +1,5 @@
-#ifndef PROJECTS_HPP
-#define PROJECTS_HPP
+#ifndef PROJECTS_STATE_HPP
+#define PROJECTS_STATE_HPP
 /*
  *  Classe que 
  */
@@ -11,7 +11,7 @@
 #include <string>
 
 
-// Body Project Structure
+// Body ProjectState Structure
 /*
  * Esses são os dados que compõe um proejeto dentro da plataforma DeSCin
  */
@@ -41,7 +41,11 @@ struct InvestimentBody {
     std::string     status;                       // "active" | "exited" | "pending"
 };
 
-class Project {
+
+/*
+ * Classe que representa o estado de um projeto na plataforma DeSCin
+ */
+class ProjectState {
 
 private:
     // Estrutura mutex para sincronização de acesso aos dados
@@ -65,10 +69,10 @@ private:
 public:
     
     // Constructors e Destructors methods
-    Project();
-    ~Project() = default;
+    ProjectState();
+    ~ProjectState() = default;
 
-    // Project Methods
+    // ProjectState Methods
     std::vector<ProjectsBody> get_projects(const std::string& status_filter = "") const;
     const ProjectsBody* get_project_by_id(const std::string& id) const;
     std::string project_name(const std::string& id) const;
@@ -89,4 +93,4 @@ public:
     std::vector<InvestimentBody> investments_for(const std::string& id) const;
 };
 
-#endif // PROJECTS_HPP
+#endif // PROJECTS_STATE_HPP

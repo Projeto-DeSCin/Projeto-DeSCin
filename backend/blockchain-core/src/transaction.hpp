@@ -26,7 +26,7 @@ class Transaction{
     public:
     // Constructor and Destructor
     Transaction() = default;
-    virtual Transaction(std::string sender_key, std::string receiver_key, unsigned long amount, long long timestamp, std::string signature);
+    Transaction(std::string sender_key, std::string receiver_key, unsigned long amount, long long timestamp, std::string signature);
     ~Transaction() = default;
 
     NLOHMANN_DEFINE_TYPE_INTRUSIVE(Transaction, body)

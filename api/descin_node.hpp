@@ -2,12 +2,12 @@
 #define DESCINODE_HPP
 
 // Importing the blockchain components
-#include "../blockchain-core/src/blockchain.hpp"
-#include "../blockchain-core/src/transaction.hpp"
-#include "../blockchain-core/src/mempool.hpp"
+#include "../backend/blockchain-core/src/blockchain.hpp"
+#include "../backend/blockchain-core/src/transaction.hpp"
+#include "../backend/blockchain-core/src/mempool.hpp"
 
 // Importing the project repository
-#include "../projects-core/project_repository.hpp"
+#include "../backend/projects-core/project_state.hpp"
 
 
 // Importing std libraries
@@ -19,7 +19,7 @@ class DescinNode {
         std::mutex node_mutex;
 
         Blockchain blockchain;
-        ProjectRepository project_repo;
+        ProjectState project_repo;
         Mempool mempool;
 
 

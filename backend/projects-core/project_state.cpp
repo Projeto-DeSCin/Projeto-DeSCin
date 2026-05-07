@@ -1,17 +1,17 @@
 // Include the header file
-#include "project.hpp"
+#include "project_state.hpp"
 // Include the necessary standard library headers
 #include <unordered_map>
 #include <vector>
 #include <mutex>
 
 // Constructor
-Project::Project() {
+ProjectState::ProjectState() {
     // Call the seed function to populate the projects map
     _seed();
 }
 
-void Project::_seed() {
+void ProjectState::_seed() {
     // Injeta sobre o unordered map _projects com alguns projetos pré-definidos
     _projects["proj-001"] = {
         "proj-001", "DeFi Yield Protocol",
@@ -33,11 +33,11 @@ void Project::_seed() {
     };
 }
 
-// Project Methods ----------------------------
+// ProjectState Methods ----------------------------
 /*
  *  O status_filter é uma string
  */
-std::vector<ProjectsBody> Project::get_projects(const std::string& status_filter) const {
+std::vector<ProjectsBody> ProjectState::get_projects(const std::string& status_filter) const {
     // Locka a estrutura para ser thread-safe
     std::lock_guard<std::mutex> lock(_mtx);
     // Instancia um vetor para armazenar os projetos filtrados
@@ -53,7 +53,7 @@ std::vector<ProjectsBody> Project::get_projects(const std::string& status_filter
 /*
  *  Retorna o projeto correspondente ao id fornecido, ou nullptr caso não exista
  */
-const ProjectsBody* Project::get_project_by_id(const std::string& id) const {
+const ProjectsBody* ProjectState::get_project_by_id(const std::string& id) const {
     // Locka a estrutura para ser thread-safe
     std::lock_guard<std::mutex> lock(_mtx);
     // Busca o projeto no unordered map _projects
@@ -66,7 +66,7 @@ const ProjectsBody* Project::get_project_by_id(const std::string& id) const {
 /*
  *  Retorna true caso o projeto esteja ativo (status == "open"), false caso contrário
  */
-bool Project::is_project_active(const std::string& id) const {
+bool ProjectState::is_project_active(const std::string& id) const {
     // Locka a estrutura para ser thread-safe
     std::lock_guard<std::mutex> lock(_mtx);
     // Busca o projeto no unordered map _projects
@@ -78,7 +78,7 @@ bool Project::is_project_active(const std::string& id) const {
 }
 
 // Investment Methods ----------------------------
-std::string Project::project_name(const std::string& id) const {
+std::string ProjectState::project_name(const std::string& id) const {
     // Locka a estrutura para ser thread-safe
     std::lock_guard<std::mutex> lock(_mtx);
     // Busca o projeto no unordered map _projects
@@ -90,7 +90,7 @@ std::string Project::project_name(const std::string& id) const {
 /*
  * Atualiza o funding do projeto com base no investimento recebido
  */
-void Project::update_funding(const std::string& inv_id,
+void ProjectState::update_funding(const std::string& inv_id,
                                            const InvestimentBody& inv_body) {
     // Locka a estrutura para ser thread-safe
     std::lock_guard<std::mutex> lock(_mtx);
@@ -112,7 +112,7 @@ void Project::update_funding(const std::string& inv_id,
 /*
  * Retorna os investimentos realizados em um projeto específico
  */
-std::vector<InvestimentBody> Project::investments_for(const std::string& id) const {
+std::vector<InvestimentBody> ProjectState::investments_for(const std::string& id) const {
     // Locka a estrutura para ser thread-safe
     std::lock_guard<std::mutex> lock(_mtx);
     // Busca os investimentos no unordered map _investments
