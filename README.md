@@ -41,10 +41,10 @@ git clone [https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git](https://github.co
 cd SEU_REPOSITORIO
 `````
 
-## 2. Instalar Ferramentas e Dependências
+## 2. Instalar Ferramentas e Dependências do Backend
 O projeto exige um compilador C++, o CMake (versão 3.14 ou superior) e a biblioteca de rede asio (necessária para a nossa API Crow).
 
-````Bash
+```Bash
 # Atualiza a lista de pacotes
 sudo apt update
 
@@ -53,9 +53,40 @@ sudo apt install build-essential cmake git -y
 
 # Instala a dependência de rede vital para a API
 sudo apt install libasio-dev -y
-````
 
-##  3. Compilar o Projeto (Build)
+```
+
+## 3. Instalar Ferramentas e Dependências do Frontend
+```
+# Instalando o unzip tool
+sudo apt install curl unzip -y
+
+# Instalando o Fast Node Manager
+curl -fsSL https://fnm.vercel.app/install | bash
+
+# Configurando o Shell
+source ~/.bashrc
+
+# Instalando o Node.js (via Fast Node Manager)
+fnm install --lts
+fnm use lts-latest
+
+# Caso precise, crie um .wslconfig com o seguinte setup
+# No caminho # C:\Users\<seu_usuario>\.wslconfig
+
+[wsl2]
+
+# Limits VM memory to use no more than 4 GB, this can be set as whole numbers using GB or MB
+memory=4GB
+
+# Sets the VM to use two virtual processors
+processors=2
+
+# Espelhando portas de rede do WSL com o Windows
+networkingMode=mirrored
+```
+
+##  4. Compilar o Projeto (Build)
 Utilizamos o CMake para baixar automaticamente as bibliotecas externas (Crow API e GoogleTest) e compilar o código.
 
 

@@ -40,6 +40,7 @@ FetchContent_MakeAvailable(googletest)
 
 # Definindo conjuntos de arquivos para compilação ----------------------------------------
 
+# Arquivos referentes à blockchain
 set(BLOCK_FILES
     backend/blockchain-core/src/block.cpp
     backend/blockchain-core/src/blockchain.cpp
@@ -48,15 +49,19 @@ set(BLOCK_FILES
     backend/blockchain-core/src/wallet.cpp
 )
 
+# Arquivos referentes aos projetos
 set(PROJECT_FILES
     backend/projects-core/project_state.cpp
 )
 
+# Arquivos referentes à API
 set(API_FILES
+    api/routes/routes.cpp
     api/descin_node.cpp
     api/middleware/auth_middleware.cpp
 )
 
+# Arquivos referentes aos utils
 set(UTILS_FILES
     backend/blockchain-core/src/utils/hashing/hash.cpp
     backend/blockchain-core/src/utils/encryptation/decode_signature.cpp

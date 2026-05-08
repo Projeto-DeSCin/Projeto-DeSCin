@@ -9,7 +9,6 @@
 // Importing the project repository
 #include "../backend/projects-core/project_state.hpp"
 
-
 // Importing std libraries
 #include <mutex>
 
@@ -21,7 +20,6 @@ class DescinNode {
         Blockchain blockchain;
         ProjectState project_repo;
         Mempool mempool;
-
 
     public:
         DescinNode(int diff = 4);
