@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import type { Project, PricePoint } from '../types';
+import type { Project, PricePoint, CurationHistory } from '../types';
 import { MOCK_PROJECTS, MOCK_PRICE_HISTORIES } from '../mocks/data';
+import { generateId } from '../utils/format';
 
 export interface LiveProject extends Project {
   priceHistory: PricePoint[];
@@ -19,6 +20,9 @@ interface ProjectStore {
   tick: () => void;
   recordBuy: (ticker: string, qty: number, price: number) => void;
   recordSell: (ticker: string, qty: number, price: number) => void;
+  addProject: (data: Omit<Project, 'updates' | 'curationHistory' | 'submittedAt' | 'status' | 'availableTokens' | 'currentPrice' | 'change24h' | 'volume' | 'approvedAt'>) => void;
+  approveProject: (ticker: string, curatorId: string, curatorName: string, reason?: string) => void;
+  rejectProject: (ticker: string, curatorId: string, curatorName: string, reason: string) => void;
 }
 
 const VOLATILITY: Record<string, number> = {
@@ -125,18 +129,17 @@ export const useProjectStore = create<ProjectStore>((set) => ({
   tick: () => {
     set(s => ({
       projects: s.projects.map(p => {
-        // Slight upward bias: 0.485 skews positive
+        // Only tick approved projects
+        if (p.status !== 'approved') return p;
+
         const noise = (Math.random() - 0.485) * p.volatility * 2;
         const newPrice = Math.max(p.openPrice * 0.4, +(p.currentPrice * (1 + noise)).toFixed(4));
         const newChange24h = p.openPrice > 0
           ? +((( newPrice - p.openPrice) / p.openPrice) * 100).toFixed(2)
           : p.change24h;
 
-        // Record a price point ~20% of ticks to keep chart alive
         const record = Math.random() < 0.20;
         const newHistory = record ? [...p.priceHistory, newPoint(newPrice)] : p.priceHistory;
-
-        // Small volume drift per tick
         const drift = p.volume24h * Math.random() * 0.0015;
 
         return {
@@ -149,6 +152,81 @@ export const useProjectStore = create<ProjectStore>((set) => ({
           priceHistory: newHistory,
         };
       }),
+    }));
+  },
+
+  addProject: (data) => {
+    const ticker = `PROJ:${data.ticker}`;
+    const now = new Date().toISOString();
+    const project: LiveProject = {
+      ...data,
+      ticker,
+      status: 'pending',
+      availableTokens: data.totalSupply,
+      currentPrice: data.initialPrice,
+      change24h: 0,
+      volume: 0,
+      submittedAt: now,
+      updates: [],
+      curationHistory: [],
+      priceHistory: [],
+      openPrice: data.initialPrice,
+      circulatingSupply: 0,
+      holders: 0,
+      marketCap: data.initialPrice * data.totalSupply,
+      volume24h: 0,
+      change7d: 0,
+      volatility: 0.015,
+      liquidity: Math.max(data.initialPrice * data.totalSupply * 0.02, 1000),
+    };
+    set(s => ({ projects: [project, ...s.projects] }));
+  },
+
+  approveProject: (ticker, curatorId, curatorName, reason) => {
+    const now = new Date().toISOString();
+    const entry: CurationHistory = {
+      id: generateId(),
+      action: 'approved',
+      curatorId,
+      curatorName,
+      reason,
+      createdAt: now,
+    };
+    set(s => ({
+      projects: s.projects.map(p => {
+        if (p.ticker !== ticker) return p;
+        const firstPoint: PricePoint = { timestamp: now.slice(0, 16), price: p.currentPrice };
+        return {
+          ...p,
+          status: 'approved',
+          approvedAt: now,
+          curationHistory: [...p.curationHistory, entry],
+          priceHistory: [firstPoint],
+          openPrice: p.currentPrice,
+          liquidity: Math.max(p.currentPrice * p.totalSupply * 0.02, 1000),
+        };
+      }),
+    }));
+  },
+
+  rejectProject: (ticker, curatorId, curatorName, reason) => {
+    const now = new Date().toISOString();
+    const entry: CurationHistory = {
+      id: generateId(),
+      action: 'rejected',
+      curatorId,
+      curatorName,
+      reason,
+      createdAt: now,
+    };
+    set(s => ({
+      projects: s.projects.map(p =>
+        p.ticker !== ticker ? p : {
+          ...p,
+          status: 'rejected',
+          curationHistory: [...p.curationHistory, entry],
+        }
+      ),
     }));
   },
 }));

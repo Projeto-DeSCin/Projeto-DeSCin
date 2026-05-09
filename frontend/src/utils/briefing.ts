@@ -27,7 +27,7 @@ export function getFormattedDateTime(): string {
   return new Date().toLocaleString('pt-BR', {
     weekday: 'short', day: '2-digit', month: 'short',
     year: 'numeric', hour: '2-digit', minute: '2-digit',
-  }).replace(',', '.') + ' BRT';
+  }).replace(', ', ' ') + ' BRT';
 }
 
 export function getGreeting(): string {

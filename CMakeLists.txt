@@ -62,6 +62,11 @@ set(UTILS_FILES
     backend/blockchain-core/src/utils/encryptation/decode_signature.cpp
 )
 
+set(DATABASE_FILES database/database.cpp)
+
+# Arquivo compilado da Blockchain -------------------------------------------------------------------------
+# Nome do arquivo de Execução/Compilado da blockchain
+
 set(executable_name descin_blockchain)
 add_executable(${executable_name})
 target_sources(${executable_name} PRIVATE
@@ -82,12 +87,14 @@ set(api_executable_name descin_api)
 add_executable(${api_executable_name})
 target_sources(${api_executable_name} PRIVATE
     main_api.cpp
-    ${ROUTES_FILES}
     api/descin_node.cpp
     api/middleware/auth_middleware.cpp
+    ${ROUTES_FILES}
     ${BLOCK_FILES}
     ${PROJECT_FILES}
     ${UTILS_FILES}
+    ${API_FILES}
+    ${DATABASE_FILES}
 )
 target_link_libraries(${api_executable_name} PRIVATE
     Threads::Threads
@@ -123,6 +130,7 @@ target_sources(${app_executable_name} PRIVATE
     ${UTILS_FILES}
     ${API_FILES}
     ${PROJECT_FILES}
+    ${DATABASE_FILES}
 )
 target_link_libraries(${app_executable_name} PRIVATE
     Threads::Threads

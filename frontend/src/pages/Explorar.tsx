@@ -6,6 +6,7 @@ import { useProjects } from '../hooks/useProjects';
 import { getSparklineForTicker } from '../mocks/data';
 import { getProjectGradient } from '../utils/color';
 import { formatCurrency } from '../utils/format';
+import { getFormattedDateTime } from '../utils/briefing';
 import type { Area, Project } from '../types';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -317,7 +318,7 @@ export default function Explorar() {
       <section className="page-s1" style={{ marginBottom: 32, paddingBottom: 32, borderBottom: '1px solid var(--rule)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--ink-muted)' }}>
-            Mercado · {approved.length} ativos listados
+            {getFormattedDateTime()}
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
             <span className="live-dot" style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--red)', boxShadow: '0 0 6px var(--red-glow)' }} />

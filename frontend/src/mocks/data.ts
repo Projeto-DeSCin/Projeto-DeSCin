@@ -468,6 +468,46 @@ Reconhecido pelo IPHAN como projeto de salvaguarda do patrimônio imaterial bras
     curationHistory: [],
   },
   {
+    ticker: 'PROJ:FERM26',
+    name: 'Biorreator de Fermentação Contínua',
+    university: 'UFRGS',
+    area: 'Ciências',
+    description:
+      'Biorreator de alta eficiência para produção contínua de biocombustíveis de segunda geração a partir de bagaço de cana-de-açúcar.',
+    descriptionLong: `O sistema integra enzimas imobilizadas e micro-organismos modificados geneticamente para converter celulose em etanol com rendimento 40% superior às tecnologias atuais.
+
+O processo contínuo elimina tempos de parada para limpeza e reabastecimento, aumentando a produtividade anual em 3x comparado a sistemas batch.
+
+Parceria com usina em São Paulo para teste piloto em 2026.`,
+    totalSupply: 90000,
+    availableTokens: 85000,
+    currentPrice: 4.5,
+    initialPrice: 4.5,
+    change24h: 0,
+    volume: 0,
+    team: [
+      { name: 'Prof. Dr. Guilherme Azevedo', role: 'Coordenador' },
+      { name: 'Dra. Patrícia Gomes', role: 'Biotecnologia' },
+      { name: 'MSc. Rafael Pires', role: 'Engenharia de Bioprocessos' },
+    ],
+    tokenomics: { founders: 62, community: 20, liquidity: 10, reserve: 8 },
+    status: 'rejected',
+    founderId: 'user_founder',
+    founderName: 'Carlos Fundador',
+    submittedAt: '2026-04-10T10:00:00Z',
+    updates: [],
+    curationHistory: [
+      {
+        id: 'cur_rej_1',
+        action: 'rejected',
+        curatorId: 'user_curator',
+        curatorName: 'Ana Curadora',
+        reason: 'Distribuição de founders acima de 60% desencoraja investidores. Tokenomics precisam ser rebalanceados com maior alocação para comunidade. Além disso, a descrição completa não especifica o modelo de retorno para os investidores. Recomenda-se revisar e resubmeter.',
+        createdAt: '2026-04-14T16:00:00Z',
+      },
+    ],
+  },
+  {
     ticker: 'PROJ:NANO26',
     name: 'Nanopartículas para Tratamento de Câncer',
     university: 'UFPE',

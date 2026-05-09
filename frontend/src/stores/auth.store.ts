@@ -11,6 +11,7 @@ interface AuthStore {
   updateUser: (updates: Partial<User>) => void;
   hasRole: (role: Role) => boolean;
   activateFounderRole: () => void;
+  activateCuratorRole: () => void;
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -44,6 +45,13 @@ export const useAuthStore = create<AuthStore>()(
         const { user } = get();
         if (user && !user.roles.includes('founder')) {
           set({ user: { ...user, roles: [...user.roles, 'founder'] } });
+        }
+      },
+
+      activateCuratorRole: () => {
+        const { user } = get();
+        if (user && !user.roles.includes('curator')) {
+          set({ user: { ...user, roles: [...user.roles, 'curator'] } });
         }
       },
     }),

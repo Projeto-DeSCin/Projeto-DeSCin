@@ -1,11 +1,12 @@
 import { formatRelativeTime } from '../../utils/format';
+import { getFormattedDateTime } from '../../utils/briefing';
 
 interface WalletHeroProps {
   assetsCount: number;
   lastSync: number;
 }
 
-export function WalletHero({ assetsCount, lastSync }: WalletHeroProps) {
+export function WalletHero({ assetsCount: _assetsCount, lastSync }: WalletHeroProps) {
   return (
     <div style={{ marginBottom: 48 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
@@ -14,7 +15,7 @@ export function WalletHero({ assetsCount, lastSync }: WalletHeroProps) {
           fontSize: 11, fontWeight: 500, letterSpacing: '0.18em',
           textTransform: 'uppercase', color: 'var(--ink-muted)',
         }}>
-          Carteira · {assetsCount} posição{assetsCount !== 1 ? 'ões' : ''} ativa{assetsCount !== 1 ? 's' : ''}
+          {getFormattedDateTime()}
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span style={{

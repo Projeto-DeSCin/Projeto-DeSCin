@@ -1,12 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Compass, Wallet } from 'lucide-react';
+import { useWalletStore } from '../../stores/wallet.store';
+import { useProjectStore } from '../../stores/project.store';
+import { formatCurrency } from '../../utils/format';
 
 function useCount(target: number, delay = 0) {
   const [val, setVal] = useState(0);
   const raf = useRef(0);
   useEffect(() => {
-    if (!target) return;
+    if (!target) { setVal(0); return; }
     const t0 = performance.now() + delay;
     const tick = (now: number) => {
       const t = Math.min(Math.max((now - t0) / 900, 0), 1);
@@ -18,10 +21,6 @@ function useCount(target: number, delay = 0) {
     return () => cancelAnimationFrame(raf.current);
   }, [target, delay]);
   return val;
-}
-
-function fmt(n: number) {
-  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n);
 }
 
 interface StatRowProps { label: string; value: string; accent?: 'success' | 'danger'; }
@@ -41,12 +40,30 @@ function StatRow({ label, value, accent }: StatRowProps) {
 
 export function PortfolioOverview() {
   const navigate = useNavigate();
-  const total    = useCount(12847.32, 0);
-  const avail    = useCount(3420.00,  80);
-  const invested = useCount(9427.32,  160);
-  const pnl      = useCount(1247.15,  240);
+  const { availableBalance, assets } = useWalletStore();
+  const liveProjects = useProjectStore(s => s.projects);
 
-  const [intPart, decPart] = fmt(total).split(',');
+  const { liveTotalInvested, totalValue, totalPnl } = useMemo(() => {
+    const liveAssets = assets.map(a => {
+      const live = liveProjects.find(p => p.ticker === a.ticker);
+      const livePrice = live?.currentPrice ?? a.averagePrice;
+      const liveValue = a.tokensOwned * livePrice;
+      const pnl = (livePrice - a.averagePrice) * a.tokensOwned;
+      return { currentValue: liveValue, pnl };
+    });
+    const invested = liveAssets.reduce((s, a) => s + a.currentValue, 0);
+    const pnl = liveAssets.reduce((s, a) => s + a.pnl, 0);
+    return { liveTotalInvested: invested, totalValue: invested + availableBalance, totalPnl: pnl };
+  }, [assets, availableBalance, liveProjects]);
+
+  const animTotal    = useCount(totalValue, 0);
+  const animAvail    = useCount(availableBalance, 80);
+  const animInvested = useCount(liveTotalInvested, 160);
+  const animPnl      = useCount(Math.abs(totalPnl), 240);
+
+  const pnlPos = totalPnl >= 0;
+
+  const [intPart, decPart] = formatCurrency(animTotal).split(',');
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
@@ -64,28 +81,32 @@ export function PortfolioOverview() {
           <span style={{ fontSize: 'clamp(40px, 4.5vw, 64px)', color: 'var(--ink-primary)' }}>{intPart},</span>
           <span style={{ fontSize: 'clamp(40px, 4.5vw, 64px)', color: 'var(--ink-muted)' }}>{decPart ?? '00'}</span>
         </div>
-        <div style={{ marginTop: 14, display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '5px 10px', borderRadius: 7, background: 'rgba(34,197,94,0.10)', border: '1px solid rgba(34,197,94,0.18)' }}>
-            <ArrowUpRight size={12} style={{ color: '#22c55e' }} />
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 600, color: '#22c55e', fontVariantNumeric: 'tabular-nums' }}>+1.83%</span>
+        {totalPnl !== 0 && (
+          <div style={{ marginTop: 14, display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '5px 10px', borderRadius: 7, background: pnlPos ? 'rgba(34,197,94,0.10)' : 'rgba(229,37,26,0.10)', border: `1px solid ${pnlPos ? 'rgba(34,197,94,0.18)' : 'rgba(229,37,26,0.18)'}` }}>
+              <ArrowUpRight size={12} style={{ color: pnlPos ? '#22c55e' : 'var(--red)', transform: pnlPos ? 'none' : 'rotate(180deg)' }} />
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 600, color: pnlPos ? '#22c55e' : 'var(--red)', fontVariantNumeric: 'tabular-nums' }}>
+                {pnlPos ? '+' : '-'}{formatCurrency(animPnl)}
+              </span>
+            </div>
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: 'var(--ink-secondary)', fontVariantNumeric: 'tabular-nums' }}>
+              P&L total
+            </span>
           </div>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: 'var(--ink-secondary)', fontVariantNumeric: 'tabular-nums' }}>
-            +R$ 231,40 hoje
-          </span>
-        </div>
+        )}
       </div>
 
       {/* Stats */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14, paddingTop: 24, borderTop: '1px solid var(--rule)' }}>
-        <StatRow label="Saldo disponível" value={fmt(avail)} />
-        <StatRow label="Total investido"  value={fmt(invested)} />
-        <StatRow label="P&L total"        value={`+${fmt(pnl)}`} accent="success" />
+        <StatRow label="Saldo disponível" value={formatCurrency(animAvail)} />
+        <StatRow label="Total investido"  value={formatCurrency(animInvested)} />
+        <StatRow label="P&L total"        value={`${pnlPos ? '+' : '-'}${formatCurrency(animPnl)}`} accent={pnlPos ? 'success' : 'danger'} />
       </div>
 
       {/* Actions */}
       <div style={{ display: 'flex', gap: 10 }}>
         {[
-          { label: 'Carteira',  icon: <Wallet size={13} />,  path: '/carteira'  },
+          { label: 'Carteira',  icon: <Wallet size={13} />,  path: '/wallet'   },
           { label: 'Explorar', icon: <Compass size={13} />, path: '/explorar' },
         ].map(({ label, icon, path }) => (
           <button
