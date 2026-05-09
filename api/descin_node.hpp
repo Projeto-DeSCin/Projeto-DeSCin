@@ -39,6 +39,10 @@ class DescinNode {
 
         bool process_investment(const std::string& sender, const std::string& project_id, unsigned long amount, const std::string& signature);
 
+        bool create_project(const std::string& sender, ProjectsBody project, const std::string& signature);
+
+
+        
         // Blockchain Methods
         inline const std::deque<std::shared_ptr<Block>>& get_chain() const {
             return blockchain.get_chain();

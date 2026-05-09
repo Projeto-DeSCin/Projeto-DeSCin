@@ -80,6 +80,9 @@ public:
     bool is_project_active(const std::string& id) const;
 
     // Investiment Methods
+    
+    // Adiciona um novo projeto ao repositório
+    bool add_project(const ProjectsBody& project);
 
     // Atualiza o funding de um investimento
     /*

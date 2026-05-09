@@ -5,6 +5,8 @@
 // Importing utils
 #include "../backend/blockchain-core/src/utils/date.hpp"
 
+// Importing metods
+#include "../backend/projects-core/project_create_tx.hpp"
 
 DescinNode::DescinNode(int diff) : blockchain(diff) {
     
@@ -50,4 +52,31 @@ bool DescinNode::process_investment(const std::string& sender, const std::string
             return false;
         }
         return false;
+}
+
+bool DescinNode::create_project(const std::string& sender, ProjectsBody project, const std::string& signature) {
+    std::lock_guard<std::mutex> lock(node_mutex);
+
+    try {
+        ProjectCreateTx tx(sender, project.project_id, 0, date(), signature, project);
+
+        if (!mempool.add_transaction(tx)) {
+            return false;
+        }
+
+        auto pending = mempool.get_pending_transactions();
+        auto new_block = blockchain.create_block(pending);
+        auto mined_block = blockchain.mining_block(new_block);
+
+        if (blockchain.send_block(mined_block)) {
+            mempool.clear_pending_transactions(pending.size());
+            project_repo.add_project(project);
+            return true;
+        }
+
+    } catch (const std::exception& e) {
+        std::cout << "Error: " << e.what() << std::endl;
+        return false;
+    }
+    return false;
 }

@@ -109,6 +109,21 @@ void ProjectState::update_funding(const std::string& inv_id,
         it->second.status = "funded";
 }
 
+// Cria o projeto Descin;
+bool ProjectState::add_project(const ProjectsBody& project) {
+    std::lock_guard<std::mutex> lock(_mtx);
+    
+    if (_projects.count(project.project_id)) {
+        return false; // projeto já existe
+    }
+    
+    _projects[project.project_id] = project;
+    return true;
+}
+
+
+
+
 /*
  * Retorna os investimentos realizados em um projeto específico
  */

@@ -52,6 +52,7 @@ set(BLOCK_FILES
 # Arquivos referentes aos projetos
 set(PROJECT_FILES
     backend/projects-core/project_state.cpp
+    backend/projects-core/project_create_tx.cpp
 )
 
 # Arquivos referentes à API
@@ -59,7 +60,6 @@ set(ROUTES_FILES
     api/routes/routes.cpp
     api/routes/projects_routes.cpp
     api/routes/wallets_routes.cpp
-
 )
 
 set(API_FILES
@@ -67,7 +67,6 @@ set(API_FILES
     api/descin_node.cpp
     api/middleware/auth_middleware.cpp
 )
-
 
 # Arquivos referentes aos utils
 set(UTILS_FILES
@@ -124,6 +123,8 @@ target_link_libraries(${api_executable_name} PRIVATE
     Threads::Threads
     nlohmann_json::nlohmann_json
     Crow::Crow
+    OpenSSL::SSL
+    OpenSSL::Crypto
     pthread
 )
 
@@ -139,10 +140,12 @@ add_executable(${project_executable_name})
 target_sources(${project_executable_name} PRIVATE
     main_projects.cpp
     ${PROJECT_FILES}
+    ${BLOCK_FILES}
+    ${UTILS_FILES}
 )
 
 # Atribuindo as bibliotecas ao programa
-target_link_libraries(${api_executable_name} PRIVATE
+target_link_libraries(${project_executable_name} PRIVATE
     Threads::Threads
     nlohmann_json::nlohmann_json
     Crow::Crow
