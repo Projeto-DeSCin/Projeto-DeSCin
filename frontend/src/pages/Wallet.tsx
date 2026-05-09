@@ -165,7 +165,7 @@ const TYPE_COLOR: Record<string, string> = {
 export default function Wallet() {
   const navigate = useNavigate();
   const {
-    availableBalance, totalInvested, assets, loading,
+    availableBalance, assets, loading,
     transactions, lastSync,
   } = useWalletStore();
   const liveProjects = useProjectStore(s => s.projects);

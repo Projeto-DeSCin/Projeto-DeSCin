@@ -88,7 +88,7 @@ export function AllocationDonut() {
     }
 
     return slices.filter(s => s.value > 0);
-  }, [assets, availableBalance, totalInvested]);
+  }, [assets, availableBalance, liveProjects]);
 
   if (data.length === 0) return <EmptyAllocation />;
 
