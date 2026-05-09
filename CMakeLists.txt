@@ -56,18 +56,27 @@ set(PROJECT_FILES
 
 # Arquivos referentes à API
 set(ROUTES_FILES
-    api/routes/routes.cpp
+    api/routes/auth_routes.cpp
     api/routes/projects_routes.cpp
     api/routes/wallets_routes.cpp
-
 )
 
-set(API_FILES
-    ${ROUTES_FILES}
-    api/descin_node.cpp
+set(CONTROLLER_FILES
+    api/controllers/auth_controller.cpp
+    api/controllers/projects_controller.cpp
+    api/controllers/wallets_controller.cpp
+)
+
+set(MIDDLEWARE_FILES
     api/middleware/auth_middleware.cpp
 )
 
+set(API_FILES
+    #api/descin_node.cpp
+    ${ROUTES_FILES}
+    ${CONTROLLER_FILES}
+    ${MIDDLEWARE_FILES}
+)
 
 # Arquivos referentes aos utils
 set(UTILS_FILES
@@ -111,7 +120,7 @@ add_executable(${api_executable_name})
 # Atribuindo arquivos correspondentes a criação do executável
 target_sources(${api_executable_name} PRIVATE
     main_api.cpp
-    ${ROUTES_FILES}
+    ${API_FILES}
 )
 
 # Atribuindo as bibliotecas ao programa

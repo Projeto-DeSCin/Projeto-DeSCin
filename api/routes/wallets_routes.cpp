@@ -1,34 +1,28 @@
+// Include wallets routes
 #include "wallets_routes.hpp"
+// Include libraries
 #include <crow.h>
 
 void WalletsRoutes::setup_routes() {
-    CROW_ROUTE(app, "/wallets")
+    CROW_ROUTE(app, "/wallets/<string>")
         .methods("GET"_method)
-        .handler([&controller](const crow::request& req, const crow::response& res){
+        ([this](const crow::request& req, const std::string& id) -> crow::response {
             try {
-                res.code = 200;
-                res.body = "Successful!";
-                return res;
+                return this->controller.get_by_id(req, id);
             }
             catch(const std::exception& e){
-                res.code = 500;
-                res.body = e.what();
-                return res;
+                return crow::response(500, e.what());
             }
         });
 
     CROW_ROUTE(app, "/wallets")
         .methods("POST"_method)
-        .handler([&controller](const crow::request& req, const crow::response& res){
+        ([this](const crow::request& req) -> crow::response {
             try {
-                res.code = 200;
-                res.body = "Successful!";
-                return res;
+                return this->controller.post(req);
             }
             catch(const std::exception& e){
-                res.code = 500;
-                res.body = e.what();
-                return res;
+                return crow::response(500, e.what());
             }
         });
 }

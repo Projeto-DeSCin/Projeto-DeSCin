@@ -1,65 +1,62 @@
+// Include projects routes
 #include "projects_routes.hpp"
+// Include libraries
 #include <crow.h>
 
 /*
  * Define routes for projects
  */
-void ProjectsRoutes::setup_routes(crow::App<>& app){
-    CROW_ROUTE(app, "/projects")
+void ProjectsRoutes::setup_routes() {
+    CROW_ROUTE(app, "/projects/<string>")
         .methods("GET"_method)
-        .handler([&controller](const crow::request& req, const crow::response& res){
+        ([this](const crow::request& req, const std::string& id) -> crow::response {
             try{
-                res.code = 200;
-                res.body = "Sucess";
-                return res;
+                return this->controller.get_by_id(req, id);
             }
             catch(const std::exception& e){
-                res.code = 500;
-                res.body = e.what();
-                return res;
+                return crow::response(500, e.what());
+            }
+        });
+        
+    CROW_ROUTE(app, "/projects")
+        .methods("GET"_method)
+        ([this](const crow::request& req) -> crow::response {
+            try{
+                return this->controller.get_all(req);
+            }
+            catch(const std::exception& e){
+                return crow::response(500, e.what());
             }
     });
     
     CROW_ROUTE(app, "/projects")
         .methods("POST"_method)
-        .handler([&controller](const crow::request& req, const crow::response& res){
+        ([this](const crow::request& req) -> crow::response {
             try{
-                res.code = 200;
-                res.body = "Sucessful!";
-                return res;
+                return this->controller.post(req);
             }
             catch(const std::exception& e){
-                res.code = 500;
-                res.body = e.what();
-                return res;
+                return crow::response(500, e.what());
             }
         });
-    CROW_ROUTE(app, "/projects")
+    CROW_ROUTE(app, "/projects/<string>")
         .methods("PUT"_method)
-        .handler([&controller](const crow::request& req, const crow::response& res){
+        ([this](const crow::request& req, const std::string& id) -> crow::response {
             try{
-                res.code = 200;
-                res.body = "Successful!";
-                return res;
+                return this->controller.put(req, id);
             }
             catch(const std::exception& e){
-                res.code = 500;
-                res.body = e.what();
-                return res;
+                return crow::response(500, e.what());
             }
         });
-    CROW_ROUTE(app, "/projects")
+    CROW_ROUTE(app, "/projects/<string>")
         .methods("DELETE"_method)
-        .handler([&controller](const crow::request& req, const crow::response& res){
+        ([this](const crow::request& req, const std::string& id) -> crow::response {
             try{
-                res.code = 200;
-                res.body = "Sucessful!";
-                return res;
+                return this->controller.del(req, id);
             }
             catch(const std::exception& e){
-                res.code = 500;
-                res.body = e.what();
-                return res;
+                return crow::response(500, e.what());
             }
     });
 }

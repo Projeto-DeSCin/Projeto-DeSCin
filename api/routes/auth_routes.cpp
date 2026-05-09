@@ -1,31 +1,29 @@
-// Include 
+// Include routes
 #include "auth_routes.hpp"
-#include '../controllers/auth_controller.hpp'
+// Include libraries
+#include <crow.h>
 
-void AuthRoutes::setup_routes(crow::App<>& app) {
+void AuthRoutes::setup_routes() {
     // Rota de Autenticação do Google
     CROW_ROUTE(app, "/auth/google/url")
         .methods("GET"_method)
-        .handler([&controller](const crow::Request&, crow::Response& res) {
+        ([this](const crow::request& req) -> crow::response { //Lambda functions não herdam os membros da classe
             try{
-                return 
-                
+                return this->controller.login_google(req);
             }
             catch (const std::exception& e) {
-                res.code = 500;
-                res.end(e.what());
+                return crow::response(500, e.what());
             }
         });
 
     CROW_ROUTE(app, "/auth/google/callback")
         .methods("GET"_method)
-        .handler([&controller](const crow::Request&, crow::Response& res) {
+        ([this](const crow::request& req) -> crow::response {
             try{
-                
+                return this->controller.callback_google(req);
             }
             catch (const std::exception& e) {
-                res.code = 500;
-                res.end(e.what());
+                return crow::response(500, e.what());
             }
         });
 
@@ -33,25 +31,23 @@ void AuthRoutes::setup_routes(crow::App<>& app) {
     // Rotas de Autenticação do GitHub
     CROW_ROUTE(app, "/auth/github/url")
         .methods("GET"_method)
-        .handler([&controller](const crow::Request&, crow::Response& res) {
+        ([this](const crow::request& req) -> crow::response {
             try{
-                
+                return this->controller.login_github(req);
             }
             catch (const std::exception& e) {
-                res.code = 500;
-                res.end(e.what());
+                return crow::response(500, e.what());
             }
         });
         
     CROW_ROUTE(app, "/auth/github/callback")
         .methods("GET"_method)
-        .handler([&controller](const crow::Request&, crow::Response& res) {
+        ([this](const crow::request& req) -> crow::response {
             try{
-                
+                return this->controller.callback_github(req);
             }
             catch (const std::exception& e) {
-                res.code = 500;
-                res.end(e.what());
+                return crow::response(500, e.what());
             }
         });
 }

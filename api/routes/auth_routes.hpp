@@ -4,11 +4,14 @@
 // Include libraries
 #include <crow.h>
 // Include routes class
-#include <routes.hpp>
+#include "routes.hpp"
+#include "../controllers/auth_controller.hpp"
 
-class AuthRoutes: public Routes {
+class AuthRoutes : public Routes<AuthController> {
 public:
-    void auth_routes(crow::App<>& app);
+    AuthRoutes(crow::App<>& app, AuthController& control) : Routes<AuthController>(app, control) {}
+    ~AuthRoutes() = default;
+    void setup_routes() override;
 };
 
 #endif // AUTH_ROUTES_HPP
