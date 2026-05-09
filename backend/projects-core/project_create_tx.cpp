@@ -7,6 +7,4 @@ ProjectCreateTx::ProjectCreateTx(
     long long timestamp,
     std::string signature,
     ProjectsBody project
-) : Transaction(sender_key, receiver_key, amount, timestamp, signature), project(project) {
-
-}
+) : Transaction(sender_key, receiver_key, amount, timestamp, signature), project(project) {}

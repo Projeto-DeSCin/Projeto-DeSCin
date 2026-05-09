@@ -1,13 +1,7 @@
-// Include API routes
 #include "api/routes/projects_routes.hpp"
 #include "api/routes/wallets_routes.hpp"
 #include "api/descin_node.hpp"
-// Include libraries
 #include <crow.h>
-
-/*
- * Initialize the API
- */
 
 int main(){
     crow::App<> app;

@@ -7,19 +7,8 @@
 class ProjectCreateTx : public Transaction {
     private:
         ProjectsBody project;
-
     public:
-        ProjectCreateTx(
-            std::string sender_key,
-            std::string receiver_key,
-            unsigned long amount,
-            long long timestamp,
-            std::string signature,
-            ProjectsBody project
-        );
-
-        
-
+        ProjectCreateTx(std::string sender_key, std::string receiver_key, unsigned long amount, long long timestamp, std::string signature, ProjectsBody project);
         ProjectsBody get_project() const { return project; }
 };
 

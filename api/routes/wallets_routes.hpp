@@ -5,7 +5,6 @@
 #include <crow.h>
 
 class WalletsRoutes : public Routes {
-    
 public:
     WalletsRoutes(crow::App<>& app, DescinNode& node) : Routes(app, node) {}
     void setup_routes() override;
