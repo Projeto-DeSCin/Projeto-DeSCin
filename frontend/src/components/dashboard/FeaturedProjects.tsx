@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MOCK_FEATURED } from '../../mocks/dashboard';
 import { FeaturedProjectCard } from './FeaturedProjectCard';
+import { useProjectStore } from '../../stores/project.store';
+import { getProjectGradient } from '../../utils/color';
+import type { FeaturedProject } from '../../mocks/dashboard';
 
 type Tab = 'alta' | 'compradas' | 'vistas';
 
@@ -11,8 +13,8 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'vistas',    label: 'Mais vistas'   },
 ];
 
-function sortProjects(tab: Tab) {
-  const copy = [...MOCK_FEATURED];
+function sortProjects(projects: FeaturedProject[], tab: Tab) {
+  const copy = [...projects];
   if (tab === 'alta')      return copy.sort((a, b) => b.change7d  - a.change7d).slice(0, 3);
   if (tab === 'compradas') return copy.sort((a, b) => b.buyCount  - a.buyCount).slice(0, 3);
   return                          copy.sort((a, b) => b.viewCount - a.viewCount).slice(0, 3);
@@ -20,7 +22,35 @@ function sortProjects(tab: Tab) {
 
 export function FeaturedProjects() {
   const [tab, setTab] = useState<Tab>('alta');
-  const projects = sortProjects(tab);
+  const liveProjects = useProjectStore(s => s.projects);
+
+  const featured: FeaturedProject[] = liveProjects
+    .filter(p => p.status === 'approved')
+    .map(p => {
+      const code = p.ticker.split(':')[1];
+      const soldPct = Math.round(((p.totalSupply - p.availableTokens) / p.totalSupply) * 100);
+      const vol = p.volume24h >= 1000
+        ? `R$ ${(p.volume24h / 1000).toFixed(1)}K`
+        : `R$ ${p.volume24h.toFixed(0)}`;
+      return {
+        ticker: p.ticker,
+        code,
+        name: p.name,
+        description: p.description,
+        university: p.university,
+        area: p.area,
+        change7d: p.change24h ?? 0,
+        price: p.currentPrice,
+        soldPercent: soldPct,
+        volume: vol,
+        buyCount: p.holders,
+        viewCount: p.holders * 3,
+        gradient: getProjectGradient(p.ticker),
+        accentColor: (p.change24h ?? 0) >= 0 ? '#22c55e' : 'var(--red)',
+      };
+    });
+
+  const projects = sortProjects(featured, tab);
 
   return (
     <div>
@@ -60,11 +90,19 @@ export function FeaturedProjects() {
       </div>
 
       {/* 3-column card grid */}
-      <div className="dash-grid-3" style={{ alignItems: 'stretch' }}>
-        {projects.map(project => (
-          <FeaturedProjectCard key={project.ticker} project={project} tab={tab} />
-        ))}
-      </div>
+      {projects.length > 0 ? (
+        <div className="dash-grid-3" style={{ alignItems: 'stretch' }}>
+          {projects.map(project => (
+            <FeaturedProjectCard key={project.ticker} project={project} tab={tab} />
+          ))}
+        </div>
+      ) : (
+        <div style={{ padding: '40px 0', textAlign: 'center' }}>
+          <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: 'var(--ink-muted)' }}>
+            Nenhum projeto aprovado no mercado ainda.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

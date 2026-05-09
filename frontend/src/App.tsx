@@ -13,8 +13,11 @@ import Wallet from './pages/Wallet';
 import Depositar from './pages/Depositar';
 import Configuracoes from './pages/Configuracoes';
 import Curadoria from './pages/curadoria/index';
+import CuratorReview from './pages/curadoria/CuratorReview';
 import FounderDashboard from './pages/founder/index';
 import CriarProjeto from './pages/founder/CriarProjeto';
+import ProjetoDetail from './pages/founder/ProjetoDetail';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 export default function App() {
   return (
@@ -33,9 +36,11 @@ export default function App() {
           <Route path="/depositar" element={<Depositar />} />
           <Route path="/configuracoes" element={<Configuracoes />} />
 
-          <Route path="/curadoria" element={<Curadoria />} />
-          <Route path="/founder" element={<FounderDashboard />} />
-          <Route path="/criar-projeto" element={<CriarProjeto />} />
+          <Route path="/curadoria" element={<ProtectedRoute requiredRole="curator"><Curadoria /></ProtectedRoute>} />
+          <Route path="/curadoria/:ticker" element={<ProtectedRoute requiredRole="curator"><CuratorReview /></ProtectedRoute>} />
+          <Route path="/founder" element={<ProtectedRoute requiredRole="founder"><FounderDashboard /></ProtectedRoute>} />
+          <Route path="/founder/:ticker" element={<ProtectedRoute requiredRole="founder"><ProjetoDetail /></ProtectedRoute>} />
+          <Route path="/criar-projeto" element={<ProtectedRoute requiredRole="founder"><CriarProjeto /></ProtectedRoute>} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

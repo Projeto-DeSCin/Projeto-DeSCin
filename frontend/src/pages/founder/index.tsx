@@ -39,7 +39,7 @@ function FounderProjectCard({ project }: { project: LiveProject }) {
 
   return (
     <div
-      onClick={() => navigate(`/projetos/${code}`)}
+      onClick={() => navigate(`/founder/${code}`)}
       style={{ ...GLASS, overflow: 'hidden', cursor: 'pointer', transition: 'transform 220ms ease, box-shadow 220ms ease' }}
       onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = 'translateY(-2px)'; el.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.70), 0 12px 32px rgba(20,20,20,0.10)'; }}
       onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = 'translateY(0)'; el.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.65), 0 4px 16px rgba(20,20,20,0.05)'; }}

@@ -184,6 +184,16 @@ function ProjectCard({ project, onApprove, onReject }: {
         {/* Action row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button
+            onClick={() => navigate(`/curadoria/${code}`)}
+            style={{ flex: 2, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, borderRadius: 12, border: '1.5px solid rgba(20,20,20,0.14)', background: 'rgba(255,255,255,0.55)', fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--ink-primary)', cursor: 'pointer', transition: 'all 150ms ease' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.80)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.55)'; }}
+          >
+            <Eye size={14} />
+            Revisar em detalhe
+          </button>
+
+          <button
             onClick={onApprove}
             style={{ flex: 1, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, borderRadius: 12, border: '1.5px solid rgba(34,197,94,0.30)', background: 'rgba(34,197,94,0.10)', fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#16a34a', cursor: 'pointer', transition: 'all 150ms ease' }}
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(34,197,94,0.18)'; }}
