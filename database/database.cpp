@@ -1,6 +1,7 @@
 #include "database.hpp"
 #include <iostream>
 #include <fstream>
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <openssl/evp.h> // "A caixa de ferramentas" principal do OpenSSl
@@ -131,5 +132,44 @@ bool append_block(const std::string& path, const std::string& user_id, const uns
     return false;
 }
 
+std::vector<EncryptedBlock> read_all_blocks(const std::string& path) {
+    std::ifstream file(path, std::ios::binary); // Abre o binário para leitura
+    if (!file.is_open()) {return {};} // Checa se tem algum erro antes de rodar o loop
+
+    std::vector<EncryptedBlock> result; // Declara o vetor que vai guardar os blocos lidos do arquivo
+
+
+    while(true) {
+        EncryptedBlock block; // Declara um bloco vazio para ser preenchido com os dados lidos do arquivo
+
+
+        uint32_t user_id_size;
+        file.read((char*)&user_id_size, sizeof(user_id_size));
+        if (!file) break; // Checa se acabou o arquivo ou se tem algum erro de leitura, se sim, sai do loop
+
+        block.user_id.resize(user_id_size); // Pré-aloca o espaço necessário para o user_id, baseado no tamanho lido do arquivo
+        file.read(&block.user_id[0], user_id_size); // Lê o user_id do arquivo e armazena no bloco
+
+        block.salt.resize(SALT_SIZE); // Pré-aloca o espaço para o salt, que tem um tamanho fixo de 16 bytes
+        file.read((char*)block.salt.data(), SALT_SIZE); // Lê o salt do arquivo e armazena no bloco
+
+        block.iv.resize(IV_SIZE); // Pré-aloca o espaço para o IV, que tem um tamanho fixo de 16 bytes
+        file.read((char*)block.iv.data(), IV_SIZE); // Lê o IV do arquivo e armazena no bloco
+
+        uint64_t cipher_len; // Lê o tamanho do próximo bloco de dados cifrados para saber quantos bytes ler a seguir
+        file.read((char*)&cipher_len, sizeof(cipher_len)); // Checa se tem algum erro de leitura, se sim, sai do loop
+
+        block.data.resize(cipher_len); // Pré-aloca o espaço para os dados cifrados, baseado no tamanho lido do arquivo
+        file.read((char*)block.data.data(), cipher_len); // Lê os dados cifrados do arquivo e armazena no bloco
+
+        result.push_back(block); // Adiciona o bloco preenchido ao vetor de resultados
+
+
+
+    }
+
+    return result;
+
+}
 
 }
