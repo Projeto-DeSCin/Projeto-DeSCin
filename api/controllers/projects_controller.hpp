@@ -3,11 +3,12 @@
 
 #include <crow.h>
 #include "controller.hpp"
+#include "../services/projects_service.hpp"
 
-class ProjectsController : public Controller {
+class ProjectsController : public Controller<ProjectsService> {
 public:
     // Default constructor and destructor
-    ProjectsController() = default;
+    ProjectsController(ProjectsService& service) : Controller<ProjectsService>(service) {}
     ~ProjectsController() = default;
     
     crow::response get_by_id(const crow::request& req, const std::string& id) const override;

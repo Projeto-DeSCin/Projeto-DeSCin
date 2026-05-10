@@ -1,12 +1,18 @@
 #ifndef AUTH_CONTROLLER_HPP
 #define AUTH_CONTROLLER_HPP
 
-#include "controller.hpp"
+// Include libraries
+#include <crow.h>
+#include <string>
 
-class AuthController : public Controller {
+// Include controller base class and user service
+#include "controller.hpp"
+#include "../services/user_service.hpp"
+
+class AuthController : public Controller<UserService> {
 public:
     // Declarando default constructor e destructor
-    AuthController() = default;
+    AuthController(UserService& user_service) : Controller<UserService>(user_service) {}  
     ~AuthController() = default;
 
     // HTTP Methods
@@ -17,6 +23,13 @@ public:
     crow::response put(const crow::request& req, const std::string& id) override { return {crow::response(405, "Method Not Allowed")}; };
     crow::response del(const crow::request& req, const std::string& id) override { return {crow::response(405, "Method Not Allowed")}; };
 
+<<<<<<< HEAD
+=======
+
+    // Autenticação Email e Senha
+    crow::response login(const crow::request& req);
+    
+>>>>>>> feat/api
     // Verifica se o usuário está autenticado com Google
     crow::response login_google(const crow::request& req);
     // Verifica o callback do Google
