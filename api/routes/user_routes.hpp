@@ -7,7 +7,7 @@
 
 class UserRoutes : public Routes<UserController> {
 public:
-    UserRoutes(crow::App& app, UserController& control) : Routes<UserController>(app, control) {}
+    UserRoutes(crow::App<>& app, UserController& control) : Routes<UserController>(app, control) {}
     ~UserRoutes() = default;
     void setup_routes() override;
 };

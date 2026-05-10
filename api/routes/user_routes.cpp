@@ -1,9 +1,14 @@
+// Include user class routes
 #include "user_routes.hpp"
-#include <crow.h>
 
-void UserRoutes::setup_routes(crow::App& app) {
+// Incldue libraries
+#include <crow.h>
+#include <string>
+
+void UserRoutes::setup_routes() {
     CROW_ROUTE(app, "/users/<string>")
-        .methods("GET"_method)([this](const crow::request& req, std::string id) -> crow::response {
+        .methods("GET"_method)
+        ([this](const crow::request& req, const std::string& id) -> crow::response {
             try {
                 return this->controller.get_by_id(req, id);
             } catch (const std::exception& e) {
@@ -21,7 +26,7 @@ void UserRoutes::setup_routes(crow::App& app) {
         });
     CROW_ROUTE(app, "/users/<string>")
         .methods("PUT"_method)
-        ([this](const crow::request& req, std::string id) -> crow::response {
+        ([this](const crow::request& req, const std::string& id) -> crow::response {
             try {
                 return this->controller.put(req, id);
             } catch (const std::exception& e) {
@@ -30,7 +35,7 @@ void UserRoutes::setup_routes(crow::App& app) {
         });
     CROW_ROUTE(app, "/users/<string>")
         .methods("DELETE"_method)
-        ([this](const crow::request& req, std::string id) -> crow::response {
+        ([this](const crow::request& req, const std::string& id) -> crow::response {
             try {
                 return this->controller.del(req, id);
             } catch (const std::exception& e) {

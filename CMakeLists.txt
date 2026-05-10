@@ -57,12 +57,14 @@ set(PROJECT_FILES
 # Arquivos referentes à API
 set(ROUTES_FILES
     api/routes/auth_routes.cpp
+    api/routes/user_routes.cpp
     api/routes/projects_routes.cpp
     api/routes/wallets_routes.cpp
 )
 
 set(CONTROLLER_FILES
     api/controllers/auth_controller.cpp
+    api/controllers/user_controller.cpp
     api/controllers/projects_controller.cpp
     api/controllers/wallets_controller.cpp
 )
@@ -101,16 +103,13 @@ add_executable(${executable_name})
 
 # Atribuindo arquivos correspondentes a criação do executável da blockchain
 target_sources(${executable_name} PRIVATE
-    main_blockchain.cpp
+    backend/blockchain-core/src/main.cpp
     ${BLOCK_FILES}
     ${UTILS_FILES}
 )
 
 # Atribuindo as bibliotecas ao programa
 target_link_libraries(${executable_name} PRIVATE
-    Threads::Threads
-    nlohmann_json::nlohmann_json
-    Crow::Crow
     OpenSSL::SSL
     OpenSSL::Crypto
     pthread
@@ -126,7 +125,7 @@ add_executable(${api_executable_name})
 
 # Atribuindo arquivos correspondentes a criação do executável
 target_sources(${api_executable_name} PRIVATE
-    main_api.cpp
+    api/main.cpp
     ${API_FILES}
 )
 
@@ -138,36 +137,12 @@ target_link_libraries(${api_executable_name} PRIVATE
     pthread
 )
 
-# Arquivo compilado dos projetos --------------------------
-
-# Nome do arquivo de Execução/Compilado do Projeto_DeSCin
-set(project_executable_name descin_projects)
-
-# Definindo o nome do arquivo executável da api do Projeto_DeSCin
-add_executable(${project_executable_name})
-
-# Atribuindo arquivos correspondentes a criação do executável
-target_sources(${project_executable_name} PRIVATE
-    main_projects.cpp
-    ${PROJECT_FILES}
-)
-
-# Atribuindo as bibliotecas ao programa
-target_link_libraries(${project_executable_name} PRIVATE
-    Threads::Threads
-    nlohmann_json::nlohmann_json
-    Crow::Crow
-    OpenSSL::SSL
-    OpenSSL::Crypto
-    pthread
-)
-
 # Arquivo compilado Projeto_DeSCin ------------------------
 
-# Nome do arquivo de Execução/Compilado da API
+# Nome do arquivo de Execução/Compilado do Projeto_DeSCin
 set(app_executable_name projeto_descin_app)
 
-# Definindo o nome do arquivo executável da api do Projeto_DeSCin
+# Definindo o nome do arquivo executável do Projeto_DeSCin
 add_executable(${app_executable_name})
 
 # Atribuindo arquivos correspondentes a criação do executável

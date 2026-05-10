@@ -1,22 +1,26 @@
 #ifndef USER_CONTROLLER_HPP
 #define USER_CONTROLLER_HPP
 
+// Include libraries
 #include <crow.h>
+#include <string>
+// Include the controller base class
 #include "controller.hpp"
+#include "../services/user_service.hpp"
 
-class UserController : public Controller {
+class UserController : public Controller<UserService> {
 public:
     // Default constructor and destructor
-    UserController() = default;
+    UserController(UserService& service) : Controller<UserService>(service) {}
     ~UserController() = default;
 
     // Methods
-    crow::response get_by_id (crow::request& req, const std::string& id) const override;
-    crow::response get_many (crow::request& req, const std::string& ids) const override;
-    crow::response get_all (crow::request& req) const override;
-    crow::response post (crow::request& req) override;
-    crow::response put (crow::request& req, const std::string& id) override;
-    crow::response del (crow::request& req, const std::string& id) override;
+    crow::response get_by_id (const crow::request& req, const std::string& id) const override;
+    crow::response get_many (const crow::request& req) const override;
+    crow::response get_all (const crow::request& req) const override;
+    crow::response post (const crow::request& req) override;
+    crow::response put (const crow::request& req, const std::string& id) override;
+    crow::response del (const crow::request& req, const std::string& id) override;
 };
 
 #endif // USER_CONTROLLER_HPP
