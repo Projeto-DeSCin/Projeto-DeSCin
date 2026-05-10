@@ -5,10 +5,18 @@
 #include <vector>
 #include <mutex>
 
+#include <fstream> // std::ofstream
+#include <filesystem> // create_directories
+
+#include <nlohmann/json.hpp> // JSON library
+
 // Constructor
 ProjectState::ProjectState() {
-    // Call the seed function to populate the projects map
-    _seed();
+    // Tenta carregar estado persistido. Se falhar (arquivo não existe
+    // ou está corrompido), faz seed com os projetos padrão.
+    if (!_load_from_disk()) {
+        _seed();
+    }
 }
 
 void ProjectState::_seed() {
@@ -138,4 +146,62 @@ void ProjectState::update_funding(const std::string& investor_address,
 
     // 6. Registra o investimento (cópia entra no vetor).
     project_investments.push_back(inv);
+    
+    // 7. Persiste o novo estado no disco.
+    _save_to_disk();
+
 }
+
+void ProjectState::_save_to_disk() const {
+    const std::string path = "data/projects.json";
+
+    // Garante que o diretório data/ existe.
+    std::error_code ec;
+    std::filesystem::create_directories("data", ec);
+    // Ignoramos ec — se falhar criar, o ofstream falha logo abaixo.
+
+    // Monta o JSON usando as macros NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE.
+    nlohmann::json j;
+    j["projects"]    = _projects;
+    j["investments"] = _investments;
+
+    // Abre em modo write (trunca conteúdo anterior).
+    std::ofstream out(path);
+    if (!out.is_open()) return;
+
+    // dump(2) = JSON indentado com 2 espaços (legível pra humano).
+    out << j.dump(2);
+
+}
+
+bool ProjectState::_load_from_disk() {
+    const std::string path = "data/projects.json";
+
+    // Arquivo não existe → primeira execução, retorna false pro construtor seedar.
+    if (!std::filesystem::exists(path)) return false;
+
+    try {
+        // Abre e parseia.
+        std::ifstream in(path);
+        if (!in.is_open()) return false;
+
+        nlohmann::json j;
+        in >> j;  // parse direto do stream
+
+        // Lê os campos com defaults caso estejam ausentes.
+        _projects    = j.value("projects",    nlohmann::json::object())
+                          .get<std::unordered_map<std::string, ProjectsBody>>();
+        _investments = j.value("investments", nlohmann::json::object())
+                          .get<std::unordered_map<std::string, std::vector<InvestimentBody>>>();
+
+        return true;
+    } catch (const std::exception&) {
+        // JSON malformado, tipo errado, etc. Voltamos como se não tivesse arquivo.
+        return false;
+    }
+}
+
+
+
+
+

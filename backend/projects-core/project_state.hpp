@@ -72,6 +72,9 @@ private:
      */
     std::unordered_map<std::string, std::vector<InvestimentBody>> _investments;
 
+    void _save_to_disk() const;
+    bool _load_from_disk();
+
     // Método privado para popular repositório com dados iniciais
     void _seed();
 

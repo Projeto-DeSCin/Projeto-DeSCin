@@ -1,0 +1,53 @@
+{
+  "investments": {
+    "proj-003": [
+      {
+        "amount_invested": 1500,
+        "current_value": 1500,
+        "invested_at": 1715250000,
+        "investor_address": "wallet_test_persist01",
+        "project_id": "proj-003",
+        "project_name": "Layer2 Bridge",
+        "status": "active"
+      }
+    ]
+  },
+  "projects": {
+    "proj-001": {
+      "category": "DeFi",
+      "created_at": "2024-01-01T00:00:00Z",
+      "description": "Protocolo descentralizado de rendimento com APY competitivo.",
+      "investors_count": 142,
+      "name": "DeFi Yield Protocol",
+      "project_id": "proj-001",
+      "roi_estimate": 35.5,
+      "status": "open",
+      "target_funding": 100000000,
+      "total_funding": 85000000
+    },
+    "proj-002": {
+      "category": "NFT",
+      "created_at": "2023-12-01T00:00:00Z",
+      "description": "Marketplace multi-chain com taxas zero.",
+      "investors_count": 89,
+      "name": "NFT Marketplace X",
+      "project_id": "proj-002",
+      "roi_estimate": 22.0,
+      "status": "funded",
+      "target_funding": 50000000,
+      "total_funding": 50000000
+    },
+    "proj-003": {
+      "category": "Infrastructure",
+      "created_at": "2024-04-01T00:00:00Z",
+      "description": "Bridge de alta velocidade entre L1 e L2.",
+      "investors_count": 29,
+      "name": "Layer2 Bridge",
+      "project_id": "proj-003",
+      "roi_estimate": 58.0,
+      "status": "open",
+      "target_funding": 200000000,
+      "total_funding": 12001500
+    }
+  }
+}
