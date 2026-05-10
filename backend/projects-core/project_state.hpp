@@ -34,6 +34,7 @@ struct ProjectsBody {
  */
 struct InvestimentBody {
     std::string     project_id;                 // ID do projeto investido
+    std::string     investor_address;            // Endereço do investidor
     std::string     project_name;               // Nome do projeto investido
     unsigned long   amount_invested;            // Valor investido
     unsigned long   current_value;              // Valor atual do investimento

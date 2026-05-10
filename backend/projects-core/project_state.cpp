@@ -88,28 +88,6 @@ std::string ProjectState::project_name(const std::string& id) const {
 }
 
 /*
- * Atualiza o funding do projeto com base no investimento recebido
- */
-void ProjectState::update_funding(const std::string& inv_id,
-                                           const InvestimentBody& inv_body) {
-    // Locka a estrutura para ser thread-safe
-    std::lock_guard<std::mutex> lock(_mtx);
-    // Adiciona o investimento ao unordered map _investments
-    _investments[inv_id].push_back(inv_body);
-
-    // Busca o projeto no unordered map _projects
-    auto it = _projects.find(inv_body.project_id);
-    // Retorna caso o projeto não seja encontrado
-    if (it == _projects.end()) return;
-    
-    // Atualiza o total_funding e o investors_count do projeto correspondente
-    it->second.total_funding += inv_body.amount_invested;
-    it->second.investors_count += 1;
-    if (it->second.total_funding >= it->second.target_funding)
-        it->second.status = "funded";
-}
-
-/*
  * Retorna os investimentos realizados em um projeto específico
  */
 std::vector<InvestimentBody> ProjectState::investments_for(const std::string& id) const {
@@ -120,4 +98,44 @@ std::vector<InvestimentBody> ProjectState::investments_for(const std::string& id
     // Retorna um vetor vazio caso o investimento não seja encontrado
     if (it == _investments.end()) return {};
     return it->second;
+}
+
+// Implementação do método update_funding que atualiza o funding de um investimento e o status do projeto correspondente 
+
+void ProjectState::update_funding(const std::string& investor_address,
+                                  const InvestimentBody& inv) {
+    std::lock_guard<std::mutex> lock(_mtx);
+
+    // 1. Achar o projeto. Se não existe, nada a fazer.
+    auto it = _projects.find(inv.project_id);
+    if (it == _projects.end()) return;
+
+    ProjectsBody& project = it->second;
+
+    // 2. Só aceita aporte em projeto "open".
+    if (project.status != "open") return;
+
+    // 3. Verifica se este investidor já apostou aqui antes.
+    bool first_time_investor = true;
+    auto& project_investments = _investments[inv.project_id];
+    for (const auto& existing : project_investments) {
+        if (existing.investor_address == investor_address) {
+            first_time_investor = false;
+            break;
+        }
+    }
+
+    // 4. Aplica os efeitos.
+    project.total_funding += inv.amount_invested;
+    if (first_time_investor) {
+        project.investors_count += 1;
+    }
+
+    // 5. Se alcançou o target, marca como funded.
+    if (project.total_funding >= project.target_funding) {
+        project.status = "funded";
+    }
+
+    // 6. Registra o investimento (cópia entra no vetor).
+    project_investments.push_back(inv);
 }

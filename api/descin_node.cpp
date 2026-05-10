@@ -33,8 +33,8 @@ bool DescinNode::process_investment(const std::string& sender, const std::string
             if (blockchain.send_block(mined_block)) {
                 mempool.clear_pending_transactions(pending.size());
 
-                InvestimentBody inv = {project_id, "", amount, 10, date(), "active"};
-                project_repo.update_funding(project_id, inv);
+                InvestimentBody inv = {project_id, sender, "", amount, amount, date(), "active"};
+                project_repo.update_funding(sender, inv);
 
                 return true;
             }
