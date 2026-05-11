@@ -1,5 +1,6 @@
 // Include auth controller
 #include "auth_controller.hpp"
+
 // Include libraries
 #include <crow.h>
 #include <string>
@@ -12,24 +13,30 @@ crow::response AuthController::login(const crow::request& req) {
         // Desmembra o body da requisição
         auto body = crow::json::load(req.body);
         // Verifica se o body existe completamente
-        if (!body.has("email") || !body.has("password")
+        if (!body.has("email") || !body.has("password"))
             return crow::response(400, "Falta o email ou a senha!");
 
-        if (!body.has("RoleChoice"))
-            return crow::response(400, "Falta escolher seu Cargo!")
+        if (!body.has("role"))
+            return crow::response(400, "Falta escolher seu Cargo!");
 
         // Desestrutura o body da requisição
         std::string email = body["email"].s();
         std::string password = body["password"].s();
         std::string role_choice = body["RoleChoice"].s();
 
-        auto result = service.login(email, password);
+        std::string user_id = auth_service.login(email, password);
 
-        if (!result)
+        // Valida o retorno, caso o usuário não exista ou a senha seja inválida
+        if (user_id.empty())
             return crow::response(401, "Email ou senha inválida");
 
+        // Construindo as informações da response
+        crow::json::wvalue res;
+        res["user_id"] = user_id;
+        res["description"] = "Autenticação Realizada com Sucesso!";
+        
         // Retorna 200 com tudo OK
-        return crow::response(200, "Autenticação Realizada com Sucesso!");
+        return crow::response(200, res);
         
     } catch (const std::exception& e) {
         // Retorna um 500 do servidor

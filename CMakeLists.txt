@@ -76,6 +76,7 @@ set(CONTROLLER_FILES
 )
 
 set(SERVICE_FILES
+    api/services/auth_service.cpp
     api/services/user_service.cpp
     api/services/projects_service.cpp
     api/services/wallets_service.cpp
@@ -121,7 +122,6 @@ target_link_libraries(${executable_name} PRIVATE
     pthread
 )
 
-
 # Arquivo compilado da API -------------------------------------------------------------------------
 # Nome do arquivo de Execução/Compilado da API
 
@@ -139,7 +139,7 @@ target_link_libraries(${api_executable_name} PRIVATE
     OpenSSL::SSL
     OpenSSL::Crypto
     pthread
-    libpqxx
+    pqxx
     dotenv
 )
 

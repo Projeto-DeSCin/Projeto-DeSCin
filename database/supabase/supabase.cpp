@@ -5,7 +5,7 @@
 #include <string>
 #include <stdexcept>
 
-static std::string Supabase::buildConnectionString() {
+std::string Supabase::buildConnectionString() {
     // Catch das variáveis de ambiente
     const char* host     = std::getenv("DB_HOST");
     const char* port     = std::getenv("DB_PORT");

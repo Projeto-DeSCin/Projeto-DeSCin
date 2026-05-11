@@ -12,7 +12,6 @@ std::optional<User> UserService::get_by_id(const std::string id) const {
 }
 
 std::optional<User> UserService::get_by_email(const std::string email) const {
-    
     return std::nullopt;
 }
 
@@ -21,6 +20,7 @@ std::vector<User> UserService::get_all() const {
 }
 
 User UserService::create(const crow::json::rvalue& body) {
+
     return {};
 }
 

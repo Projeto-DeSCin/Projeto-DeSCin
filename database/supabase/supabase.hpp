@@ -15,7 +15,8 @@ private:
 
 public:
     Supabase() : conn(buildConnectionString()) {}
-
     pqxx::connection& getConnection() { return conn; }
 
 };
+
+#endif // SUPABASE_HPP

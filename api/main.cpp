@@ -19,7 +19,7 @@
 // Include DeSCin node
 
 // Include Supabase
-#include "database/supabase/supabase.hpp"
+#include "../database/supabase/supabase.hpp"
 
 // Include libraries
 #include <crow.h>
@@ -44,9 +44,10 @@
     UserService user_service(db.getConnection());
     ProjectsService projects_service(db.getConnection());
     WalletsService wallets_service(db.getConnection());
+    AuthService auth_service(user_service, db.getConnection());
     
     // Initialize Controllers
-    AuthController auth_controller(user_service);
+    AuthController auth_controller(auth_service);
     UserController user_controller(user_service);
     ProjectsController projects_controller(projects_service);
     WalletsController wallets_controller(wallets_service);

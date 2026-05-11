@@ -3,6 +3,8 @@
 // Include libraries
 #include <crow.h>
 #include <string>
+#include <vector>
+
 
 crow::response UserController::get_by_id(const crow::request& req, const std::string& id) const {
     try {
@@ -30,7 +32,22 @@ crow::response UserController::get_all(const crow::request& req) const {
 
 crow::response UserController::post(const crow::request& req) {
     try {
-        return crow::response(200, "Usuário Criado!");
+        // Parse the JSON body
+        auto body = crow::json::load(req.body);
+
+        // Defining campos obrigatórios
+        std::vector<std::string> required_fields = {"user_name", "email", "password"};
+
+        // Validando se a requisição possui todos os campos obrigatórios
+        for (const auto& field : required_fields) {
+            if (!body.has(field) || body.length() == 0 || body.length() > required_fields.size()) {
+                return crow::response(400, "Campo obrigatório não encontrado: " + field);
+            }
+        }
+        // Converting body to JSON and passing to service
+        crow::json::wvalue body_json = body;
+        return service.post(body_json);
+        
     } catch (const std::exception& e) {
         return crow::response(500, e.what());
     }

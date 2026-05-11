@@ -13,7 +13,7 @@
 
 class ProjectsService : public Service<Project> {
 public:
-    ProjectsService() = default;
+    ProjectsService(pqxx::connection& conn) : Service<Project>(conn) {}
     ~ProjectsService() = default;
 
     std::optional<Project> get_by_id(const std::string id) const override;
