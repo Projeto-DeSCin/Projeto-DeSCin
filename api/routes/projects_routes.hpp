@@ -1,12 +1,21 @@
 #ifndef PROJECTS_ROUTES_HPP
 #define PROJECTS_ROUTES_HPP
 
-#include "routes.hpp"
+// Include libraries
 #include <crow.h>
 
-class ProjectsRoutes : public Routes {
+// Include Base class
+#include "routes.hpp"
+#include "../controllers/projects_controller.hpp"
+
+/* 
+ * Routes for projects in DeSCin
+ */
+class ProjectsRoutes : public Routes <ProjectsController>{
+        
 public:
-    ProjectsRoutes(crow::App<>& app, DescinNode& node) : Routes(app, node) {}
+    ProjectsRoutes(crow::App<>& app, ProjectsController& control) : Routes<ProjectsController>(app, control) {}
+    ~ProjectsRoutes() = default;
     void setup_routes() override;
 };
 

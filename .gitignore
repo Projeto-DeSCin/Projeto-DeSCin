@@ -46,3 +46,9 @@ build/
 # pem files
 *.pem
 
+# Enviroment files
+*.env
+
+# Outros
+**/.zed
+**/*.http

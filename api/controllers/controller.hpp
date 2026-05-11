@@ -6,10 +6,13 @@
 /*
  * Abstract base class for all controllers. 
  */
+template <typename Service>
 class Controller {
 protected:
-    
+    Service& service;
 public:
+    // Default constructor and destructor.
+    Controller(Service& service) : service(service) {}
     virtual ~Controller() = default;
     
     // Pure virtual methods for HTTP methods.

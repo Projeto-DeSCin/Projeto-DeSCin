@@ -21,14 +21,30 @@ FetchContent_Declare(crow
 )
 FetchContent_MakeAvailable(crow)
 
-find_package(Threads REQUIRED)
-find_package(OpenSSL REQUIRED)
+FetchContent_Declare(
+    libpqxx
+    GIT_REPOSITORY https://github.com/jtv/libpqxx.git
+    GIT_TAG 7.8.1
+)
+FetchContent_MakeAvailable(libpqxx)
+
+FetchContent_Declare(
+    dotenv
+    GIT_REPOSITORY https://github.com/laserpants/dotenv-cpp.git
+    GIT_TAG master
+)
+FetchContent_MakeAvailable(dotenv)
 
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
 )
 FetchContent_MakeAvailable(googletest)
+
+find_package(Threads REQUIRED)
+find_package(OpenSSL REQUIRED)
+
+# Sets de Arquivos para compilação ------------------------------------------------------------
 
 set(BLOCK_FILES
     backend/blockchain-core/src/block.cpp
@@ -46,23 +62,48 @@ set(PROJECT_FILES
 )
 
 set(ROUTES_FILES
-    api/routes/routes.cpp
+    api/routes/auth_routes.cpp
+    api/routes/user_routes.cpp
     api/routes/projects_routes.cpp
     api/routes/wallets_routes.cpp
 )
 
-set(API_FILES
-    ${ROUTES_FILES}
-    api/descin_node.cpp
+set(CONTROLLER_FILES
+    api/controllers/auth_controller.cpp
+    api/controllers/user_controller.cpp
+    api/controllers/projects_controller.cpp
+    api/controllers/wallets_controller.cpp
+)
+
+set(SERVICE_FILES
+    api/services/auth_service.cpp
+    api/services/user_service.cpp
+    api/services/projects_service.cpp
+    api/services/wallets_service.cpp
+)
+
+set(MIDDLEWARE_FILES
     api/middleware/auth_middleware.cpp
 )
 
+set(API_FILES
+    #api/descin_node.cpp
+    ${ROUTES_FILES}
+    ${CONTROLLER_FILES}
+    ${SERVICE_FILES}
+    ${MIDDLEWARE_FILES}
+)
+
+# Arquivos referentes aos utils
 set(UTILS_FILES
     backend/blockchain-core/src/utils/hashing/hash.cpp
     backend/blockchain-core/src/utils/encryptation/decode_signature.cpp
 )
 
-set(DATABASE_FILES database/database.cpp)
+set(DATABASE_FILES
+    database/database.cpp
+    database/supabase/supabase.cpp
+)
 
 # Arquivo compilado da Blockchain -------------------------------------------------------------------------
 # Nome do arquivo de Execução/Compilado da blockchain
@@ -70,29 +111,24 @@ set(DATABASE_FILES database/database.cpp)
 set(executable_name descin_blockchain)
 add_executable(${executable_name})
 target_sources(${executable_name} PRIVATE
-    main_blockchain.cpp
+    backend/blockchain-core/src/main.cpp
     ${BLOCK_FILES}
     ${UTILS_FILES}
 )
 target_link_libraries(${executable_name} PRIVATE
-    Threads::Threads
     nlohmann_json::nlohmann_json
-    Crow::Crow
     OpenSSL::SSL
     OpenSSL::Crypto
     pthread
 )
 
+# Arquivo compilado da API -------------------------------------------------------------------------
+# Nome do arquivo de Execução/Compilado da API
+
 set(api_executable_name descin_api)
 add_executable(${api_executable_name})
 target_sources(${api_executable_name} PRIVATE
-    main_api.cpp
-    api/descin_node.cpp
-    api/middleware/auth_middleware.cpp
-    ${ROUTES_FILES}
-    ${BLOCK_FILES}
-    ${PROJECT_FILES}
-    ${UTILS_FILES}
+    api/main.cpp
     ${API_FILES}
     ${DATABASE_FILES}
 )
@@ -103,24 +139,12 @@ target_link_libraries(${api_executable_name} PRIVATE
     OpenSSL::SSL
     OpenSSL::Crypto
     pthread
+    pqxx
+    dotenv
 )
 
-set(project_executable_name descin_projects)
-add_executable(${project_executable_name})
-target_sources(${project_executable_name} PRIVATE
-    main_projects.cpp
-    ${PROJECT_FILES}
-    ${BLOCK_FILES}
-    ${UTILS_FILES}
-)
-target_link_libraries(${project_executable_name} PRIVATE
-    Threads::Threads
-    nlohmann_json::nlohmann_json
-    Crow::Crow
-    OpenSSL::SSL
-    OpenSSL::Crypto
-    pthread
-)
+# Arquivo compilado Projeto_DeSCin -----------------------------------------------------------
+# Nome do arquivo de Execução/Compilado do Projeto_DeSCin
 
 set(app_executable_name projeto_descin_app)
 add_executable(${app_executable_name})
@@ -139,10 +163,14 @@ target_link_libraries(${app_executable_name} PRIVATE
     OpenSSL::SSL
     OpenSSL::Crypto
     pthread
+    pqxx
+    dotenv
 )
 
-enable_testing()
+# Arquivo compilado de Testes -----------------------------------------------------------
+# Nome do arquivo de Execução/Compilado dos Testes
 
+enable_testing()
 set(run_tests descin_tests)
 set(BLOCK_FILES_TEST)
 set(BLOCK_HEADER_TEST)

@@ -13,6 +13,6 @@ export const PROJECT_PERIODS = PERIODS;
 
 export const QUICK_DEPOSIT_VALUES = [50, 100, 250, 500];
 
-export const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080';
+export const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'https://descin-api.fly.dev/';
 
 export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== 'false';

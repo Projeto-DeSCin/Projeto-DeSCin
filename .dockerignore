@@ -1,0 +1,19 @@
+# Build local
+build/
+cmake-build-debug/
+cmake-build-release/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Git
+.git/
+.github/
+
+# Outros
+*.o
+*.a
+*.so
+**/.zed
+**/*.http

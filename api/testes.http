@@ -1,0 +1,9 @@
+### Listar posts
+POST http://localhost:18080/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "gcgc@cin.ufpe.br",
+  "password": "123456789"
+}

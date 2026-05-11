@@ -1,0 +1,24 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'api/**'
+      - 'CMakeLists.txt'
+      - 'Dockerfile'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      steps:
+      - uses: actions/checkout@v4
+      
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - run: echo "/root/.fly/bin" >> $GITHUB_PATH
+      
+      - run: fly deploy .
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
