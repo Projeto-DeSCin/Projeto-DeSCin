@@ -100,12 +100,12 @@ Project ProjectsService::create(const crow::json::rvalue& body) {
         "founders_percentage, community_percentage, liquidity_percentage, "
         "reserved_percentage, investors_count, roi_estimate, "
         "created_at::text, updated_at::text",
-        body["name"].s(),
-        body.has("knowledge_area")  ? std::string(body["knowledge_area"].s())  : "",
-        body.has("institution")     ? std::string(body["institution"].s())     : "",
-        body.has("resume")          ? std::string(body["resume"].s())          : "",
-        body.has("description")     ? std::string(body["description"].s())     : "",
-        body.has("status")          ? std::string(body["status"].s())          : "open",
+        std::string(std::string(body["name"].s())),
+        body.has("knowledge_area")  ? std::string(std::string(body["knowledge_area"].s()))  : "",
+        body.has("institution")     ? std::string(std::string(body["institution"].s()))     : "",
+        body.has("resume")          ? std::string(std::string(body["resume"].s()))          : "",
+        body.has("description")     ? std::string(std::string(body["description"].s()))     : "",
+        body.has("status")          ? std::string(std::string(body["status"].s()))          : "open",
         body.has("initial_token_price")  ? body["initial_token_price"].d()     : 0.0,
         body.has("target_funding")       ? body["target_funding"].d()          : 0.0,
         body.has("founders_percentage")  ? body["founders_percentage"].d()     : 0.0,
@@ -132,12 +132,12 @@ Project ProjectsService::update(const crow::json::rvalue& body, const std::strin
         p.append(val);
     };
 
-    if (body.has("name"))                add_str("name",                 body["name"].s());
-    if (body.has("knowledge_area"))      add_str("knowledge_area",       body["knowledge_area"].s());
-    if (body.has("institution"))         add_str("institution",          body["institution"].s());
-    if (body.has("resume"))              add_str("resume",               body["resume"].s());
-    if (body.has("description"))         add_str("description",          body["description"].s());
-    if (body.has("status"))              add_str("status",               body["status"].s());
+    if (body.has("name"))                add_str("name",                 std::string(body["name"].s()));
+    if (body.has("knowledge_area"))      add_str("knowledge_area",       std::string(body["knowledge_area"].s()));
+    if (body.has("institution"))         add_str("institution",          std::string(body["institution"].s()));
+    if (body.has("resume"))              add_str("resume",               std::string(body["resume"].s()));
+    if (body.has("description"))         add_str("description",          std::string(body["description"].s()));
+    if (body.has("status"))              add_str("status",               std::string(body["status"].s()));
     if (body.has("total_funding"))       add_dbl("total_funding",        body["total_funding"].d());
     if (body.has("target_funding"))      add_dbl("target_funding",       body["target_funding"].d());
     if (body.has("investors_count"))     add_dbl("investors_count",      static_cast<double>(body["investors_count"].i()));

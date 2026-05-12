@@ -93,7 +93,7 @@ Wallet WalletsService::create(const crow::json::rvalue& body) {
         "VALUES ($1, $2, $3, $4) "
         "RETURNING id, user_id, address, balance, balance_usd, "
         "created_at::text, updated_at::text",
-        body["address"].s(),
+        std::string(body["address"].s()),
         static_cast<int>(body["user_id"].i()),
         body.has("balance")     ? static_cast<long long>(body["balance"].i())     : 0LL,
         body.has("balance_usd") ? body["balance_usd"].d()                         : 0.0);

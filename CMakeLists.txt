@@ -21,12 +21,7 @@ FetchContent_Declare(crow
 )
 FetchContent_MakeAvailable(crow)
 
-FetchContent_Declare(
-    libpqxx
-    GIT_REPOSITORY https://github.com/jtv/libpqxx.git
-    GIT_TAG 7.8.1
-)
-FetchContent_MakeAvailable(libpqxx)
+find_package(PostgreSQL REQUIRED)
 
 FetchContent_Declare(
     dotenv

@@ -70,10 +70,10 @@ User UserService::create(const crow::json::rvalue& body) {
     if (!body.has("username") || !body.has("email") || !body.has("password"))
         throw ValidationException("Campos obrigatórios: username, email, password");
 
-    std::string username = body["username"].s();
-    std::string email    = body["email"].s();
-    std::string hashed   = password::hash(body["password"].s());
-    std::string bio      = body.has("bio") ? std::string(body["bio"].s()) : "";
+    std::string username = std::string(body["username"].s());
+    std::string email    = std::string(body["email"].s());
+    std::string hashed   = password::hash(std::string(body["password"].s()));
+    std::string bio      = body.has("bio") ? std::string(std::string(body["bio"].s())) : "";
 
     std::string roles = "{}";
     if (body.has("roles")) {
@@ -108,10 +108,10 @@ User UserService::update(const crow::json::rvalue& body, const std::string id) {
         p.append(val);
     };
 
-    if (body.has("username")) add_str("username", body["username"].s());
-    if (body.has("email"))    add_str("email",    body["email"].s());
-    if (body.has("bio"))      add_str("bio",      body["bio"].s());
-    if (body.has("password")) add_str("password", password::hash(body["password"].s()));
+    if (body.has("username")) add_str("username", std::string(body["username"].s()));
+    if (body.has("email"))    add_str("email",    std::string(body["email"].s()));
+    if (body.has("bio"))      add_str("bio",      std::string(body["bio"].s()));
+    if (body.has("password")) add_str("password", password::hash(std::string(body["password"].s())));
 
     if (set_clause.empty()) throw ValidationException("Nenhum campo para atualizar");
 

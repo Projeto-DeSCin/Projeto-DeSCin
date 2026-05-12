@@ -1,0 +1,6 @@
+host db.xbcbudbrsxqdnoatkerz.supabase.co | grep "has address"x
+DB_PORT=5432
+DB_NAME=postgres
+DB_USER=postgres
+DB_PASSWORD=Q0mpYb60LnBPuun7
+PORT=8080

@@ -46,14 +46,19 @@ export default function Register() {
     setLoading(true);
     try {
       const result = await authService.register(name, email, password);
-      if (result) {
-        login(result.user, result.token);
-        navigate('/');
-      } else {
+      login(result.user, result.token);
+      navigate('/');
+    } catch (err: any) {
+      const status = err?.response?.status;
+      if (status === 409) {
         setError('Este e-mail já está em uso');
+      } else if (status === 400) {
+        setError('Dados inválidos. Verifique os campos.');
+      } else if (!err?.response) {
+        setError('Servidor offline. Tente novamente mais tarde.');
+      } else {
+        setError('Erro ao criar conta. Tente novamente.');
       }
-    } catch {
-      setError('Erro ao criar conta. Tente novamente.');
     } finally {
       setLoading(false);
     }

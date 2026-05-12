@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"\\\\\\\\wsl.localhost\\\\Ubuntu\\\\home\\\\edisio\\\\Projeto-DeSCin\")"
+    ]
+  }
+}
