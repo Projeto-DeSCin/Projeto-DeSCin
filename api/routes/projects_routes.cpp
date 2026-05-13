@@ -22,7 +22,7 @@ void ProjectsRoutes::setup_routes() {
         .methods("GET"_method)
         ([this](const crow::request& req) -> crow::response {
             try{
-                return this->controller.get_all(req);
+                return this->controller.get_many(req);
             }
             catch(const std::exception& e){
                 return crow::response(500, e.what());

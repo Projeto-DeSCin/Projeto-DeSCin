@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { PeriodSelector } from './PeriodSelector';
-import { getPortfolioChartData } from '../../mocks/dashboard';
+import { MOCK_PORTFOLIO_HISTORY } from '../../mocks/data';
+import { filterPortfolioHistory } from '../../utils/period';
+import type { Period } from '../../types';
 
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number }>; label?: string }) {
   if (!active || !payload?.length) return null;
@@ -21,7 +23,8 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
 
 export function DashboardChart() {
   const [period, setPeriod] = useState('1M');
-  const data = getPortfolioChartData(period);
+  const filtered = filterPortfolioHistory(MOCK_PORTFOLIO_HISTORY, period as Period);
+  const data = filtered.map(p => ({ date: p.timestamp, value: p.value }));
 
   return (
     <div>

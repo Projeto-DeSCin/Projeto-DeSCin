@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { MOCK_DASH_ASSETS } from '../../mocks/dashboard';
+import { useWalletStore } from '../../stores/wallet.store';
 
 function fmt(n: number) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n);
@@ -8,6 +8,17 @@ function fmt(n: number) {
 
 export function AssetsTable() {
   const navigate = useNavigate();
+  const assets = useWalletStore(s => s.assets);
+  const MOCK_DASH_ASSETS = assets.map(a => ({
+    ticker: a.ticker,
+    code: a.ticker.replace('PROJ:', ''),
+    university: '',
+    tokens: a.tokensOwned,
+    price: a.averagePrice,
+    change24h: a.change24h,
+    total: a.currentValue,
+    color: '#7C3AED',
+  }));
   const total = MOCK_DASH_ASSETS.reduce((a, x) => a + x.total, 0);
 
   return (

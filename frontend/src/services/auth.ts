@@ -10,7 +10,15 @@ export const authService = {
   async login(email: string, password: string): Promise<AuthResult | null> {
     try {
       const res = await api.post('/auth/login', { email, password, role: 'investor' });
-      const { user, token } = res.data;
+      const data = res.data;
+      const token = data.token;
+      const user = {
+        id: String(data.user_id),
+        name: data.username,
+        email: data.email,
+        roles: data.roles ?? ['investor'],
+        createdAt: new Date().toISOString(),
+      };
       localStorage.setItem('auth_token', token);
       return { user, token };
     } catch {

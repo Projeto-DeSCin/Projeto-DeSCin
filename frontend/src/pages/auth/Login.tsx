@@ -111,7 +111,7 @@ export default function Login() {
     e.preventDefault();
     setError(null);
 
-    if (selectedRole === 'curator' && curatorCode !== '00000') {
+    if (selectedRole === 'curator' && curatorCode !== '111111') {
       setError('Código de curador inválido. Solicite o código à equipe DeSCin.');
       return;
     }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CheckCircle, XCircle, Clock, Eye, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { AppLayout } from '../../components/layout/AppLayout';
 import { useProjectStore } from '../../stores/project.store';
+import { useProjectsStore } from '../../stores/projects.store';
 import { useAuthStore } from '../../stores/auth.store';
 import { useNotificationStore } from '../../stores/notification.store';
 import { toast } from '../../components/ui/Toast';
@@ -236,8 +237,25 @@ function ProjectCard({ project, onApprove, onReject }: {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function Curadoria() {
+  const { fetch: fetchProjects, projects: apiProjects } = useProjectsStore();
+  
+  // Busca projetos da API ao carregar
+  const [loaded, setLoaded] = useState(false);
+  if (!loaded) {
+    setLoaded(true);
+    fetchProjects();
+  }
   const { user, hasRole } = useAuthStore();
-  const { projects, approveProject, rejectProject } = useProjectStore();
+  const { projects: localProjects, approveProject, rejectProject, addProject } = useProjectStore();
+  
+  // Merge API projects into local store
+  const allProjects = [...localProjects];
+  apiProjects.forEach(ap => {
+    if (!allProjects.find(p => p.name === ap.name)) {
+      addProject(ap as any);
+    }
+  });
+  const projects = allProjects;
   const push = useNotificationStore(s => s.push);
   const navigate = useNavigate();
 

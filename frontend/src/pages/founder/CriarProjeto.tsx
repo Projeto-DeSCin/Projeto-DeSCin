@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, Trash2, ChevronRight, ChevronLeft, Check } from 'lucide-react';
 import { AppLayout } from '../../components/layout/AppLayout';
 import { useProjectStore } from '../../stores/project.store';
+import { projectsService } from '../../services/projects';
 import { useAuthStore } from '../../stores/auth.store';
 import { useNotificationStore } from '../../stores/notification.store';
 import { toast } from '../../components/ui/Toast';
@@ -478,33 +479,38 @@ export default function CriarProjeto() {
 
   const tickerUsed = projects.some(p => p.ticker === `PROJ:${form.ticker}`);
 
+  const isFounder = user?.email === 'founder@descin.com' || user?.roles?.includes('curator');
+
   const handleSubmit = async () => {
-    if (!user) return;
-    setSubmitting(true);
-    await new Promise(r => setTimeout(r, 900));
-    addProject({
-      ticker: form.ticker,
-      name: form.name,
-      university: form.university,
-      area: form.area as Area,
-      description: form.description,
-      descriptionLong: form.descriptionLong,
-      totalSupply: parseInt(form.totalSupply) || 100000,
-      initialPrice: parseFloat(form.initialPrice) || 5,
-      tokenomics: {
-        founders:  parseInt(form.founders)  || 20,
-        community: parseInt(form.community) || 50,
-        liquidity: parseInt(form.liquidity) || 20,
-        reserve:   parseInt(form.reserve)   || 10,
-      },
-      team: form.team.filter(m => m.name.trim()),
-      founderId:   user.id,
-      founderName: user.name,
-    });
-    push({ type: 'info', title: 'Projeto submetido', message: `${form.name} está em análise pela curadoria.` });
-    toast('success', 'Projeto enviado para curadoria!', 'Submetido com sucesso');
-    setSubmitting(false);
-    navigate('/founder');
+    try {
+      const payload = {
+        name: form.name,
+        ticker: form.ticker,
+        university: form.university,
+        area: form.area,
+        description: form.description,
+        descriptionLong: form.descriptionLong,
+        totalSupply: parseInt(form.totalSupply),
+        initialPrice: parseFloat(form.initialPrice),
+        currentPrice: parseFloat(form.initialPrice),
+        tokenomics: {
+          founders: parseInt(form.founders),
+          community: parseInt(form.community),
+          liquidity: parseInt(form.liquidity),
+          reserve: parseInt(form.reserve),
+        },
+        team: form.team.filter(t => t.name),
+        founderId: user?.id ?? '',
+        founderName: user?.name ?? '',
+      };
+
+      await projectsService.create(payload);
+      addProject(payload as any);
+      navigate('/founder');
+    } catch (e) {
+      console.error('Erro ao criar projeto:', e);
+      navigate('/founder');
+    }
   };
 
   const currentStep = STEPS[step];
