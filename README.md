@@ -13,7 +13,7 @@ Um nó de blockchain focado em Ciência Descentralizada (DeSci), construído em 
 
 Este projeto foi desenhado para rodar em ambientes Linux. 
 * **Ubuntu (Nativo):** Suporte total e nativo.
-* **Windows 10/11:** Suporte total via **WSL 2** (Windows Subsystem for Linux). Tentar compilar nativamente no Windows com MSVC pode gerar erros nas dependências de rede.
+* **Windows 10/11:** Suporte total via **WSL 2** (Windows Subsystem for Linux). Tentar compilar nativamente no Windows com MSVC pode gerar erros nas dependências de rede. 
 
 ---
 
